@@ -8,15 +8,18 @@ namespace Attack
     {
         public new string name;
 
-        public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
+        [Header("Attack Info")] public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
         public List<AttackInputEnum> attackInputs;
         public int attackBlockFrameLoss;
-        public float attackRunTime;
+
+        [Header("Attack Animation")] public float attackRunTime;
+        public string attackAnimTrigger;
 
         private float _currentRunTime;
         private bool _isAttackActive;
 
         public delegate void AttackEnded();
+
         public AttackEnded OnAttackEnded;
 
         #region External Functions
@@ -57,7 +60,7 @@ namespace Attack
             _currentRunTime = attackRunTime;
             _isAttackActive = true;
 
-            Debug.Log(name);
+            Debug.Log($"Attack Launched: {name}");
         }
 
         public void UpdateAttack()
@@ -84,6 +87,8 @@ namespace Attack
             // Probably do something more here..
             _currentRunTime = 0;
             _isAttackActive = false;
+
+            Debug.Log($"Attack Ended: {name}");
 
             OnAttackEnded?.Invoke();
         }
