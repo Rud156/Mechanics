@@ -78,23 +78,23 @@ namespace Player
             playerAnimator.SetBool(BaseAttackParam, true);
             switch (attackEnum)
             {
-                case AttackEnum.HeavyPunch:
+                case AttackEnum.HeavyPunch: // 0.2
                     playerAnimator.SetTrigger(HeavyPunchAttackParam);
                     break;
 
-                case AttackEnum.HighKick:
+                case AttackEnum.HighKick: // 0.42
                     playerAnimator.SetTrigger(HighKickAttackParam);
                     break;
 
-                case AttackEnum.HookPunch:
+                case AttackEnum.HookPunch: // 0.3
                     playerAnimator.SetTrigger(HookPunchAttackParam);
                     break;
 
-                case AttackEnum.LightPunch:
+                case AttackEnum.LightPunch: // 0.23
                     playerAnimator.SetTrigger(LightPunchAttackParam);
                     break;
 
-                case AttackEnum.UpperPunch:
+                case AttackEnum.UpperPunch: // 0.38
                     playerAnimator.SetTrigger(UpperPunchAttackParam);
                     break;
 
