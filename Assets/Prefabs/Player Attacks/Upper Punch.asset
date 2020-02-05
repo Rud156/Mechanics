@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: LightAttack
+  m_Name: Upper Punch
   m_EditorClassIdentifier: 
-  name: Light Attack
+  name: Upper Punch
   allowedAttacks: []
-  attackInputs: 00000000
+  attackInputs: 0000000000000000
   attackBlockFrameLoss: 7
-  attackRunTime: 0.7
+  attackRunTime: 0.5
+  attackAnimTrigger: UpperP

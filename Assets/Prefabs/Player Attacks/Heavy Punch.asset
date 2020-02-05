@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: QuickAttack
+  m_Name: Heavy Punch
   m_EditorClassIdentifier: 
-  name: Quick Attack
+  name: Heavy Punch
   allowedAttacks: []
-  attackInputs: 0000000000000000
-  attackBlockFrameLoss: 7
-  attackRunTime: 0.5
+  attackInputs: 01000000
+  attackBlockFrameLoss: 15
+  attackRunTime: 1.3
+  attackAnimTrigger: HeavyP

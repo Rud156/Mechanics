@@ -5,7 +5,10 @@ namespace Player
 {
     public class PlayerAttackController : MonoBehaviour
     {
+        private static readonly int BaseAttackParam = Animator.StringToHash("Attack");
+
         public AttackController attackController;
+        public Animator playerAnimator;
         public float attackStartDelay; // Given as the player might want to start with combos
 
         private float _currentAttackDelay;

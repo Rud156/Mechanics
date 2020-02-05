@@ -5388,6 +5388,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5656526706211696925}
   - component: {fileID: 2308665251355597927}
+  - component: {fileID: 8296172668784517203}
+  - component: {fileID: 8296172668784517202}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -5451,10 +5453,49 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:Neck'\n\tTransform
+    'mixamorig:Head'\n\tTransform 'mixamorig:RightFoot'\n\tTransform 'mixamorig:LeftLeg'\n\tTransform
+    'mixamorig:RightShoulder'\n\tTransform 'mixamorig:Spine'\n\tTransform 'mixamorig:LeftHandMiddle3'\n\tTransform
+    'mixamorig:RightForeArm'\n\tTransform 'mixamorig:RightHandThumb3'\n\tand more
+    ...\n\tFrom animation clip 'a_Running'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8296172668784517203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708656323712303886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dd54a0e6c8524646b82851ed102d7ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowedAttacks:
+  - {fileID: 11400000, guid: b671994c137a7f74e923ffb6b6a59387, type: 2}
+  - {fileID: 11400000, guid: 142a1a56a2eb35740ac82256976719c5, type: 2}
+  - {fileID: 11400000, guid: d4d1f652a6644744bb811d93557eed7c, type: 2}
+  - {fileID: 11400000, guid: 9e8dfafe657c93a41bd5c3246146651b, type: 2}
+  - {fileID: 11400000, guid: c8e101a70f9c3fa4181fd655b62dcad0, type: 2}
+--- !u!114 &8296172668784517202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708656323712303886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2235e4bd027a744a52d151b321ec36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackController: {fileID: 8296172668784517203}
+  playerAnimator: {fileID: 2308665251355597927}
+  attackStartDelay: 0.7
 --- !u!1 &8710781979371370347
 GameObject:
   m_ObjectHideFlags: 0

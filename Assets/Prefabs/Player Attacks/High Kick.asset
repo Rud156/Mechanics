@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: HeavySmashAttack
+  m_Name: High Kick
   m_EditorClassIdentifier: 
-  name: Heavy Smash Attack
-  allowedAttacks:
-  - {fileID: 11400000, guid: 142a1a56a2eb35740ac82256976719c5, type: 2}
-  - {fileID: 11400000, guid: b671994c137a7f74e923ffb6b6a59387, type: 2}
-  attackInputs: 020000000200000001000000
-  attackBlockFrameLoss: 10
-  attackRunTime: 2
+  name: High Kick
+  allowedAttacks: []
+  attackInputs: 010000000100000000000000
+  attackBlockFrameLoss: 15
+  attackRunTime: 1.5
+  attackAnimTrigger: HighK
