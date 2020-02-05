@@ -8,9 +8,12 @@ namespace Attack
     {
         public new string name;
 
-        [Header("Attack Info")] public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
+        [Header("Attack Info")]
+        public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
+
         public List<AttackInputEnum> attackInputs;
         public int attackBlockFrameLoss;
+        public AttackEnum attackEnum;
 
         [Header("Attack Animation")] public float attackRunTime;
         public string attackAnimTrigger;
@@ -18,8 +21,10 @@ namespace Attack
         private float _currentRunTime;
         private bool _isAttackActive;
 
+        public delegate void AttackLaunched();
         public delegate void AttackEnded();
 
+        public AttackLaunched OnAttackLaunched;
         public AttackEnded OnAttackEnded;
 
         #region External Functions
@@ -47,6 +52,8 @@ namespace Attack
 
             return true;
         }
+
+        public AttackEnum GetAttackEnum() => attackEnum;
 
         public int GetBlockFrameCount() => attackBlockFrameLoss;
 

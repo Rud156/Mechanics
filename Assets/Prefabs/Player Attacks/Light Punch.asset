@@ -16,5 +16,6 @@ MonoBehaviour:
   allowedAttacks: []
   attackInputs: 00000000
   attackBlockFrameLoss: 7
-  attackRunTime: 0.7
+  attackEnum: 3
+  attackRunTime: 0.23
   attackAnimTrigger: LightP

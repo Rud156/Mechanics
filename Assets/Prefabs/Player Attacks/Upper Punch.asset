@@ -16,5 +16,6 @@ MonoBehaviour:
   allowedAttacks: []
   attackInputs: 0000000000000000
   attackBlockFrameLoss: 7
-  attackRunTime: 0.5
+  attackEnum: 4
+  attackRunTime: 0.38
   attackAnimTrigger: UpperP

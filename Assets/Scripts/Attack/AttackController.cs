@@ -12,8 +12,8 @@ namespace Attack
 
         private List<AttackInputEnum> _attackInputs;
 
-        public delegate void AttackLaunched();
-        public delegate void AttackEnded();
+        public delegate void AttackLaunched(AttackEnum attackEnum);
+        public delegate void AttackEnded(AttackEnum attackEnum);
         public delegate void ResetAttackInputs();
 
         public AttackLaunched OnAttackLaunched;
@@ -71,7 +71,7 @@ namespace Attack
                     attackSelected = true;
                     _currentRunningAttack = allowedAttack;
 
-                    OnAttackLaunched?.Invoke();
+                    OnAttackLaunched?.Invoke(allowedAttack.GetAttackEnum());
                     break;
                 }
             }
@@ -88,7 +88,7 @@ namespace Attack
         private void HandleAttackEnded()
         {
             _currentRunningAttack.OnAttackEnded -= HandleAttackEnded;
-            OnAttackEnded?.Invoke();
+            OnAttackEnded?.Invoke(_currentRunningAttack.GetAttackEnum());
 
             CheckAndLaunchAttack();
         }

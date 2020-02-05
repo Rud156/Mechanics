@@ -18,5 +18,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b671994c137a7f74e923ffb6b6a59387, type: 2}
   attackInputs: 020000000200000001000000
   attackBlockFrameLoss: 10
-  attackRunTime: 2
+  attackEnum: 2
+  attackRunTime: 0.3
   attackAnimTrigger: HookP
