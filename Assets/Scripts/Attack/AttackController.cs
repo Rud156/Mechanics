@@ -60,7 +60,24 @@ namespace Attack
         private void CheckAndLaunchAttack()
         {
             bool attackSelected = false;
-            if (_currentRunningAttack != null)
+            foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
+            {
+                // In case the opponent has blocked the attack, prevent the player from attacking for sometime
+                if (allowedComboAttack.CanPlayComboAttack(_attackInputs, _currentRunningAttack) &&
+                    _currentFrameCount >= 0)
+                {
+                    _currentRunningAttack = allowedComboAttack;
+
+                    allowedComboAttack.OnAttackLaunched += HandleAttackLaunched;
+                    allowedComboAttack.OnAttackEnded += HandleAttackEnded;
+                    allowedComboAttack.LaunchAttack();
+
+                    attackSelected = true;
+                    break;
+                }
+            }
+
+            if (_currentRunningAttack != null && !attackSelected)
             {
                 foreach (BaseAttack sequentialAttack in _currentRunningAttack.GetSequentialAttacks())
                 {
@@ -74,26 +91,6 @@ namespace Attack
                         sequentialAttack.OnAttackLaunched += HandleAttackLaunched;
                         sequentialAttack.OnAttackEnded += HandleAttackEnded;
                         sequentialAttack.LaunchAttack();
-
-                        attackSelected = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!attackSelected)
-            {
-                foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
-                {
-                    // In case the opponent has blocked the attack, prevent the player from attacking for sometime
-                    if (allowedComboAttack.CanPlayComboAttack(_attackInputs, _currentRunningAttack) &&
-                        _currentFrameCount >= 0)
-                    {
-                        _currentRunningAttack = allowedComboAttack;
-
-                        allowedComboAttack.OnAttackLaunched += HandleAttackLaunched;
-                        allowedComboAttack.OnAttackEnded += HandleAttackEnded;
-                        allowedComboAttack.LaunchAttack();
 
                         attackSelected = true;
                         break;
