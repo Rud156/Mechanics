@@ -9,6 +9,7 @@ namespace Attack
         public List<BaseAttack> allowedComboAttacks;
 
         private BaseAttack _currentRunningAttack;
+        private Rigidbody _targetRb;
         private int _currentFrameCount;
 
         private List<AttackInputEnum> _attackInputs;
@@ -34,6 +35,18 @@ namespace Attack
         {
             if (_currentRunningAttack != null)
             {
+                if (_targetRb != null)
+                {
+                    float targetVelocity = _currentRunningAttack.GetAttackVelocity();
+                    Vector3 velocity = _targetRb.transform.forward * targetVelocity;
+                    velocity.y = 0;
+                    _targetRb.velocity = new Vector3(
+                        velocity.x,
+                        _targetRb.velocity.y,
+                        velocity.z
+                    );
+                }
+
                 _currentRunningAttack.UpdateAttack();
             }
 
@@ -52,6 +65,12 @@ namespace Attack
         public void LaunchAccumulatedAttack() => CheckAndLaunchAttack();
 
         public void AttackBlocked(int blockFrameCount) => _currentFrameCount = blockFrameCount;
+
+        public Rigidbody TargetRb
+        {
+            get => _targetRb;
+            set => _targetRb = value;
+        }
 
         #endregion
 

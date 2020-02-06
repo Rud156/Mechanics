@@ -18,5 +18,7 @@ MonoBehaviour:
   attackInputs: 00000000
   attackBlockFrameLoss: 7
   attackEnum: 2
+  sequentialAttacks: []
   attackRunTime: 1.09
   attackAnimTrigger: FS
+  attackLifeTimeForwardForce: 0.7

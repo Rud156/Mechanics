@@ -9,6 +9,7 @@ namespace Player
 
         public AttackController attackController;
         public Animator playerAnimator;
+        public Rigidbody playerRb;
         public float attackStartDelay; // Given as the player might want to start with combos
 
         private float _currentAttackDelay;
@@ -24,6 +25,8 @@ namespace Player
 
             _currentAttackDelay = attackStartDelay;
             _attackLaunched = false;
+
+            attackController.TargetRb = playerRb;
         }
 
         private void OnDestroy()

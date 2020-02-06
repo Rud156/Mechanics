@@ -21,3 +21,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b671994c137a7f74e923ffb6b6a59387, type: 2}
   attackRunTime: 1.19
   attackAnimTrigger: HSlash
+  attackLifeTimeForwardForce: 0.5
