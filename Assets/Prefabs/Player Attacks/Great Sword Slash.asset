@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: Hook Punch
+  m_Name: Great Sword Slash
   m_EditorClassIdentifier: 
-  name: Hook Punch
+  name: Great Sword Slash
   allowedAttacks:
   - {fileID: 11400000, guid: 142a1a56a2eb35740ac82256976719c5, type: 2}
+  - {fileID: 11400000, guid: d4d1f652a6644744bb811d93557eed7c, type: 2}
   - {fileID: 11400000, guid: b671994c137a7f74e923ffb6b6a59387, type: 2}
-  attackInputs: 020000000200000001000000
-  attackBlockFrameLoss: 10
-  attackEnum: 2
-  attackRunTime: 0.3
-  attackAnimTrigger: HookP
+  attackInputs: 000000000000000001000000
+  attackBlockFrameLoss: 15
+  attackEnum: 4
+  attackRunTime: 3.15
+  attackAnimTrigger: GSS

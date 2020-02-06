@@ -3016,7 +3016,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd54a0e6c8524646b82851ed102d7ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedAttacks: []
+  allowedBaseAttacks:
+  - {fileID: 11400000, guid: 142a1a56a2eb35740ac82256976719c5, type: 2}
+  - {fileID: 11400000, guid: b671994c137a7f74e923ffb6b6a59387, type: 2}
+  - {fileID: 11400000, guid: d4d1f652a6644744bb811d93557eed7c, type: 2}
+  allowedComboAttacks:
+  - {fileID: 11400000, guid: 930d2a23de5b6a849a1a8953296bd686, type: 2}
+  - {fileID: 11400000, guid: 9e8dfafe657c93a41bd5c3246146651b, type: 2}
+  - {fileID: 11400000, guid: c8e101a70f9c3fa4181fd655b62dcad0, type: 2}
 --- !u!114 &8118033384542745791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3029,6 +3036,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2235e4bd027a744a52d151b321ec36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackController: {fileID: 0}
-  playerAnimator: {fileID: 0}
-  attackStartDelay: 0
+  attackController: {fileID: 7470361326429796175}
+  playerAnimator: {fileID: 4022764822178872553}
+  attackStartDelay: 0.5

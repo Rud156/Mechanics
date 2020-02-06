@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: Heavy Punch
+  m_Name: Heavy Slash
   m_EditorClassIdentifier: 
-  name: Heavy Punch
+  name: Heavy Slash
   allowedAttacks: []
-  attackInputs: 01000000
-  attackBlockFrameLoss: 15
-  attackEnum: 0
-  attackRunTime: 0.2
-  attackAnimTrigger: HeavyP
+  attackInputs: 00000000
+  attackBlockFrameLoss: 7
+  attackEnum: 1
+  attackRunTime: 1.19
+  attackAnimTrigger: HSlash

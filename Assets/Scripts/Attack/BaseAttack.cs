@@ -8,9 +8,7 @@ namespace Attack
     {
         public new string name;
 
-        [Header("Attack Info")]
-        public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
-
+        [Header("Attack Info")] public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
         public List<AttackInputEnum> attackInputs;
         public int attackBlockFrameLoss;
         public AttackEnum attackEnum;
@@ -21,15 +19,15 @@ namespace Attack
         private float _currentRunTime;
         private bool _isAttackActive;
 
-        public delegate void AttackLaunched();
-        public delegate void AttackEnded();
+        public delegate void AttackLaunched(AttackEnum attackEnum, string attackAnimTrigger);
+        public delegate void AttackEnded(AttackEnum attackEnum, string attackAnimTrigger);
 
         public AttackLaunched OnAttackLaunched;
         public AttackEnded OnAttackEnded;
 
         #region External Functions
 
-        public bool CanPlayAttack(List<AttackInputEnum> attackInputEnums, BaseAttack previousAttack)
+        public bool CanPlayComboAttack(List<AttackInputEnum> attackInputEnums, BaseAttack previousAttack)
         {
             // Probably Contains Will Not Work Because of Instancing
             if (allowedAttacks.Count != 0 && !allowedAttacks.Contains(previousAttack))
@@ -53,7 +51,16 @@ namespace Attack
             return true;
         }
 
-        public AttackEnum GetAttackEnum() => attackEnum;
+        public bool CanPlayBasicAttack(List<AttackInputEnum> attackInputEnums, BaseAttack previousAttack)
+        {
+            if (allowedAttacks.Count != 0 && !allowedAttacks.Contains(previousAttack))
+            {
+                return false;
+            }
+
+            AttackInputEnum attackKey = attackInputs[0];
+            return attackInputEnums.Contains(attackKey);
+        }
 
         public int GetBlockFrameCount() => attackBlockFrameLoss;
 
@@ -67,7 +74,7 @@ namespace Attack
             _currentRunTime = attackRunTime;
             _isAttackActive = true;
 
-            Debug.Log($"Attack Launched: {name}");
+            OnAttackLaunched?.Invoke(attackEnum, attackAnimTrigger);
         }
 
         public void UpdateAttack()
@@ -97,7 +104,7 @@ namespace Attack
 
             Debug.Log($"Attack Ended: {name}");
 
-            OnAttackEnded?.Invoke();
+            OnAttackEnded?.Invoke(attackEnum, attackAnimTrigger);
         }
 
         #endregion

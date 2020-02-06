@@ -1,5 +1,4 @@
-﻿using System;
-using Attack;
+﻿using Attack;
 using UnityEngine;
 
 namespace Player
@@ -7,11 +6,6 @@ namespace Player
     public class PlayerAttackController : MonoBehaviour
     {
         private static readonly int BaseAttackParam = Animator.StringToHash("Attack");
-        private static readonly int LightPunchAttackParam = Animator.StringToHash("LightP");
-        private static readonly int HookPunchAttackParam = Animator.StringToHash("HookP");
-        private static readonly int HeavyPunchAttackParam = Animator.StringToHash("HeavyP");
-        private static readonly int UpperPunchAttackParam = Animator.StringToHash("UpperP");
-        private static readonly int HighKickAttackParam = Animator.StringToHash("HighK");
 
         public AttackController attackController;
         public Animator playerAnimator;
@@ -41,18 +35,7 @@ namespace Player
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                attackController.AddAttackInput(AttackInputEnum.Attack_1);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                attackController.AddAttackInput(AttackInputEnum.Attack_2);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                attackController.AddAttackInput(AttackInputEnum.Attack_3);
-            }
+            RegisterAttackInputs();
 
             if (_currentAttackDelay > 0)
             {
@@ -71,42 +54,42 @@ namespace Player
 
         #region Utility Functions
 
-        private void HandleAttackLaunched(AttackEnum attackEnum)
+        private void RegisterAttackInputs()
         {
-            _attackLaunched = true;
-
-            playerAnimator.SetBool(BaseAttackParam, true);
-            switch (attackEnum)
+            if (Input.GetMouseButtonDown(0))
             {
-                case AttackEnum.HeavyPunch: // 0.2
-                    playerAnimator.SetTrigger(HeavyPunchAttackParam);
-                    break;
-
-                case AttackEnum.HighKick: // 0.42
-                    playerAnimator.SetTrigger(HighKickAttackParam);
-                    break;
-
-                case AttackEnum.HookPunch: // 0.3
-                    playerAnimator.SetTrigger(HookPunchAttackParam);
-                    break;
-
-                case AttackEnum.LightPunch: // 0.23
-                    playerAnimator.SetTrigger(LightPunchAttackParam);
-                    break;
-
-                case AttackEnum.UpperPunch: // 0.38
-                    playerAnimator.SetTrigger(UpperPunchAttackParam);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(attackEnum), attackEnum, null);
+                attackController.AddAttackInput(AttackInputEnum.BaseAttack);
+            }
+            else if (Input.GetKeyDown(ControlConstants.Attack_1))
+            {
+                attackController.AddAttackInput(AttackInputEnum.Attack_1);
+            }
+            else if (Input.GetKeyDown(ControlConstants.Attack_2))
+            {
+                attackController.AddAttackInput(AttackInputEnum.Attack_2);
+            }
+            else if (Input.GetKeyDown(ControlConstants.Attack_3))
+            {
+                attackController.AddAttackInput(AttackInputEnum.Attack_3);
+            }
+            else if (Input.GetKeyDown(ControlConstants.Attack_4))
+            {
+                attackController.AddAttackInput(AttackInputEnum.Attack_4);
             }
         }
 
-        private void HandleAttackEnded(AttackEnum attackEnum)
+        private void HandleAttackLaunched(AttackEnum attackEnum, string attackAnimTrigger)
+        {
+            _attackLaunched = true;
+            playerAnimator.SetBool(BaseAttackParam, true);
+            playerAnimator.SetTrigger(attackAnimTrigger);
+        }
+
+        private void HandleAttackEnded(AttackEnum attackEnum, string attackAnimTrigger)
         {
             _attackLaunched = false;
             playerAnimator.SetBool(BaseAttackParam, false);
+            playerAnimator.ResetTrigger(attackAnimTrigger);
         }
 
         private void HandleResetAttackInputs()

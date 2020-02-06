@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: Upper Punch
+  m_Name: Forward Slash
   m_EditorClassIdentifier: 
-  name: Upper Punch
-  allowedAttacks: []
-  attackInputs: 0000000000000000
+  name: Forward Slash
+  allowedAttacks:
+  - {fileID: 11400000, guid: b671994c137a7f74e923ffb6b6a59387, type: 2}
+  attackInputs: 00000000
   attackBlockFrameLoss: 7
-  attackEnum: 4
-  attackRunTime: 0.38
-  attackAnimTrigger: UpperP
+  attackEnum: 2
+  attackRunTime: 1.09
+  attackAnimTrigger: FS

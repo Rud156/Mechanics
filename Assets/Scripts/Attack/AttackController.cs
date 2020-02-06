@@ -5,15 +5,16 @@ namespace Attack
 {
     public class AttackController : MonoBehaviour
     {
-        public List<BaseAttack> allowedAttacks;
+        public List<BaseAttack> allowedBaseAttacks;
+        public List<BaseAttack> allowedComboAttacks;
 
         private BaseAttack _currentRunningAttack;
         private int _currentFrameCount;
 
         private List<AttackInputEnum> _attackInputs;
 
-        public delegate void AttackLaunched(AttackEnum attackEnum);
-        public delegate void AttackEnded(AttackEnum attackEnum);
+        public delegate void AttackLaunched(AttackEnum attackEnum, string attackAnimTrigger);
+        public delegate void AttackEnded(AttackEnum attackEnum, string attackAnimTrigger);
         public delegate void ResetAttackInputs();
 
         public AttackLaunched OnAttackLaunched;
@@ -58,37 +59,63 @@ namespace Attack
 
         private void CheckAndLaunchAttack()
         {
-            bool attackSelected = false;
+            bool comboAttackSelected = false;
 
-            foreach (BaseAttack allowedAttack in allowedAttacks)
+            foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
             {
                 // In case the opponent has blocked the attack, prevent the player from attacking for sometime
-                if (allowedAttack.CanPlayAttack(_attackInputs, _currentRunningAttack) && _currentFrameCount >= 0)
+                if (allowedComboAttack.CanPlayComboAttack(_attackInputs, _currentRunningAttack) && _currentFrameCount >= 0)
                 {
-                    allowedAttack.OnAttackEnded += HandleAttackEnded;
-                    allowedAttack.LaunchAttack();
+                    _currentRunningAttack = allowedComboAttack;
 
-                    attackSelected = true;
-                    _currentRunningAttack = allowedAttack;
+                    allowedComboAttack.OnAttackLaunched += HandleAttackLaunched;
+                    allowedComboAttack.OnAttackEnded += HandleAttackEnded;
+                    allowedComboAttack.LaunchAttack();
 
-                    OnAttackLaunched?.Invoke(allowedAttack.GetAttackEnum());
+                    comboAttackSelected = true;
                     break;
                 }
             }
 
-            _attackInputs.Clear();
+            bool baseAttackSelected = false;
+            // Clear and Check Normal Attacks for Input
+            if (!comboAttackSelected)
+            {
+                foreach (BaseAttack allowedBaseAttack in allowedBaseAttacks)
+                {
+                    // In case the opponent has blocked the attack, prevent the player from attacking for sometime
+                    if (allowedBaseAttack.CanPlayBasicAttack(_attackInputs, _currentRunningAttack) && _currentFrameCount >= 0)
+                    {
+                        _currentRunningAttack = allowedBaseAttack;
 
-            if (!attackSelected) // Handle the case where no input or all wrong input was given
+                        allowedBaseAttack.OnAttackLaunched += HandleAttackLaunched;
+                        allowedBaseAttack.OnAttackEnded += HandleAttackEnded;
+                        allowedBaseAttack.LaunchAttack();
+
+                        baseAttackSelected = true;
+                        break;
+                    }
+                }
+            }
+
+            _attackInputs.Clear();
+            if (!comboAttackSelected && !baseAttackSelected)
             {
                 _currentRunningAttack = null;
                 OnResetAttackInputs?.Invoke();
             }
         }
 
-        private void HandleAttackEnded()
+        private void HandleAttackLaunched(AttackEnum attackEnum, string attackAnimTrigger)
+        {
+            _currentRunningAttack.OnAttackLaunched -= HandleAttackLaunched;
+            OnAttackLaunched?.Invoke(attackEnum, attackAnimTrigger);
+        }
+
+        private void HandleAttackEnded(AttackEnum attackEnum, string attackAnimTrigger)
         {
             _currentRunningAttack.OnAttackEnded -= HandleAttackEnded;
-            OnAttackEnded?.Invoke(_currentRunningAttack.GetAttackEnum());
+            OnAttackEnded?.Invoke(attackEnum, attackAnimTrigger);
 
             CheckAndLaunchAttack();
         }

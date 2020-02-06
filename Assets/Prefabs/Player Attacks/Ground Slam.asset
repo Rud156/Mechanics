@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: High Kick
+  m_Name: Ground Slam
   m_EditorClassIdentifier: 
-  name: High Kick
+  name: Ground Slam
   allowedAttacks: []
-  attackInputs: 010000000100000000000000
-  attackBlockFrameLoss: 15
-  attackEnum: 1
-  attackRunTime: 0.42
-  attackAnimTrigger: HighK
+  attackInputs: 000000000200000002000000
+  attackBlockFrameLoss: 7
+  attackEnum: 3
+  attackRunTime: 2.11
+  attackAnimTrigger: GS

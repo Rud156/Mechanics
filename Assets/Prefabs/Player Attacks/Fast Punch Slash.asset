@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: Light Punch
+  m_Name: Fast Punch Slash
   m_EditorClassIdentifier: 
-  name: Light Punch
-  allowedAttacks: []
+  name: Fast Punch Slash
+  allowedAttacks:
+  - {fileID: 11400000, guid: 142a1a56a2eb35740ac82256976719c5, type: 2}
   attackInputs: 00000000
   attackBlockFrameLoss: 7
-  attackEnum: 3
-  attackRunTime: 0.23
-  attackAnimTrigger: LightP
+  attackEnum: 0
+  attackRunTime: 1.19
+  attackAnimTrigger: FPS
