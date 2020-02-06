@@ -59,32 +59,56 @@ namespace Attack
 
         private void CheckAndLaunchAttack()
         {
-            bool comboAttackSelected = false;
-
-            foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
+            bool attackSelected = false;
+            if (_currentRunningAttack != null)
             {
-                // In case the opponent has blocked the attack, prevent the player from attacking for sometime
-                if (allowedComboAttack.CanPlayComboAttack(_attackInputs, _currentRunningAttack) && _currentFrameCount >= 0)
+                foreach (BaseAttack sequentialAttack in _currentRunningAttack.GetSequentialAttacks())
                 {
-                    _currentRunningAttack = allowedComboAttack;
+                    // This is because Sequential Attacks can be both ComboAttacks and BasicAttacks
+                    if ((sequentialAttack.CanPlayBasicAttack(_attackInputs, _currentRunningAttack) ||
+                         sequentialAttack.CanPlayComboAttack(_attackInputs, _currentRunningAttack)) &&
+                        _currentFrameCount >= 0)
+                    {
+                        _currentRunningAttack = sequentialAttack;
 
-                    allowedComboAttack.OnAttackLaunched += HandleAttackLaunched;
-                    allowedComboAttack.OnAttackEnded += HandleAttackEnded;
-                    allowedComboAttack.LaunchAttack();
+                        sequentialAttack.OnAttackLaunched += HandleAttackLaunched;
+                        sequentialAttack.OnAttackEnded += HandleAttackEnded;
+                        sequentialAttack.LaunchAttack();
 
-                    comboAttackSelected = true;
-                    break;
+                        attackSelected = true;
+                        break;
+                    }
                 }
             }
 
-            bool baseAttackSelected = false;
+            if (!attackSelected)
+            {
+                foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
+                {
+                    // In case the opponent has blocked the attack, prevent the player from attacking for sometime
+                    if (allowedComboAttack.CanPlayComboAttack(_attackInputs, _currentRunningAttack) &&
+                        _currentFrameCount >= 0)
+                    {
+                        _currentRunningAttack = allowedComboAttack;
+
+                        allowedComboAttack.OnAttackLaunched += HandleAttackLaunched;
+                        allowedComboAttack.OnAttackEnded += HandleAttackEnded;
+                        allowedComboAttack.LaunchAttack();
+
+                        attackSelected = true;
+                        break;
+                    }
+                }
+            }
+
             // Clear and Check Normal Attacks for Input
-            if (!comboAttackSelected)
+            if (!attackSelected)
             {
                 foreach (BaseAttack allowedBaseAttack in allowedBaseAttacks)
                 {
                     // In case the opponent has blocked the attack, prevent the player from attacking for sometime
-                    if (allowedBaseAttack.CanPlayBasicAttack(_attackInputs, _currentRunningAttack) && _currentFrameCount >= 0)
+                    if (allowedBaseAttack.CanPlayBasicAttack(_attackInputs, _currentRunningAttack) &&
+                        _currentFrameCount >= 0)
                     {
                         _currentRunningAttack = allowedBaseAttack;
 
@@ -92,14 +116,14 @@ namespace Attack
                         allowedBaseAttack.OnAttackEnded += HandleAttackEnded;
                         allowedBaseAttack.LaunchAttack();
 
-                        baseAttackSelected = true;
+                        attackSelected = true;
                         break;
                     }
                 }
             }
 
             _attackInputs.Clear();
-            if (!comboAttackSelected && !baseAttackSelected)
+            if (!attackSelected)
             {
                 _currentRunningAttack = null;
                 OnResetAttackInputs?.Invoke();

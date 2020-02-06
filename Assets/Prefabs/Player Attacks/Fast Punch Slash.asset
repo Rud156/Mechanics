@@ -18,5 +18,7 @@ MonoBehaviour:
   attackInputs: 00000000
   attackBlockFrameLoss: 7
   attackEnum: 0
+  sequentialAttacks:
+  - {fileID: 11400000, guid: d4d1f652a6644744bb811d93557eed7c, type: 2}
   attackRunTime: 1.19
   attackAnimTrigger: FPS
