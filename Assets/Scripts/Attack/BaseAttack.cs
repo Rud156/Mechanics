@@ -78,7 +78,6 @@ namespace Attack
 
         public void LaunchAttack()
         {
-            // Probably do something more here..
             _currentRunTime = attackRunTime;
             _isAttackActive = true;
 
@@ -89,7 +88,6 @@ namespace Attack
 
         public void UpdateAttack()
         {
-            // Probably do something more here..
             _currentRunTime -= Time.deltaTime;
 
             if (_currentRunTime <= 0)
@@ -97,6 +95,8 @@ namespace Attack
                 EndAttack();
             }
         }
+
+        public void ForceEndAttack() => EndAttack();
 
         #endregion
 
@@ -108,7 +108,6 @@ namespace Attack
 
         private void EndAttack()
         {
-            // Probably do something more here..
             _currentRunTime = 0;
             _isAttackActive = false;
 

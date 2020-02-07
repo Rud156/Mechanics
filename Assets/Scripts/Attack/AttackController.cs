@@ -17,10 +17,12 @@ namespace Attack
         public delegate void AttackLaunched(AttackEnum attackEnum, string attackAnimTrigger);
         public delegate void AttackEnded(AttackEnum attackEnum, string attackAnimTrigger);
         public delegate void ResetAttackInputs();
+        public delegate void AttackRecoil();
 
         public AttackLaunched OnAttackLaunched;
         public AttackEnded OnAttackEnded;
         public ResetAttackInputs OnResetAttackInputs;
+        public AttackRecoil OnAttackRecoil;
 
         #region Unity Functions
 
@@ -64,7 +66,20 @@ namespace Attack
 
         public void LaunchAccumulatedAttack() => CheckAndLaunchAttack();
 
-        public void AttackBlocked(int blockFrameCount) => _currentFrameCount = blockFrameCount;
+        public void AttackBlocked()
+        {
+            if (_currentRunningAttack == null)
+            {
+                return;
+            }
+
+            int blockFrameCount = _currentRunningAttack.GetBlockFrameCount();
+            _attackInputs.Clear(); // Clear inputs as we don't want to launch a next attack
+            _currentRunningAttack.ForceEndAttack();
+
+            _currentFrameCount = blockFrameCount;
+            OnAttackRecoil?.Invoke();
+        }
 
         public Rigidbody TargetRb
         {

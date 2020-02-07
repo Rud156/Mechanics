@@ -6,6 +6,7 @@ namespace Player
     public class PlayerAttackController : MonoBehaviour
     {
         private static readonly int BaseAttackParam = Animator.StringToHash("Attack");
+        private static readonly int RecoilImpactParam = Animator.StringToHash("RImapct");
 
         public AttackController attackController;
         public Animator playerAnimator;
@@ -22,6 +23,7 @@ namespace Player
             attackController.OnAttackLaunched += HandleAttackLaunched;
             attackController.OnAttackEnded += HandleAttackEnded;
             attackController.OnResetAttackInputs += HandleResetAttackInputs;
+            attackController.OnAttackRecoil += HandleAttackRecoil;
 
             _currentAttackDelay = attackStartDelay;
             _attackLaunched = false;
@@ -34,6 +36,7 @@ namespace Player
             attackController.OnAttackLaunched -= HandleAttackLaunched;
             attackController.OnAttackEnded -= HandleAttackEnded;
             attackController.OnResetAttackInputs -= HandleResetAttackInputs;
+            attackController.OnAttackRecoil -= HandleAttackRecoil;
         }
 
         private void Update()
@@ -98,6 +101,11 @@ namespace Player
         private void HandleResetAttackInputs()
         {
             _currentAttackDelay = attackStartDelay; // Reset timer to check for inputs
+        }
+
+        private void HandleAttackRecoil()
+        {
+            playerAnimator.SetTrigger(RecoilImpactParam);
         }
 
         #endregion
