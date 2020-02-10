@@ -11,7 +11,7 @@ namespace Attack
 
         private BaseAttack m_currentRunningAttack;
         private Rigidbody m_targetRb;
-        private int m_currentFrameCount;
+        private float m_currentAttackStopTime;
 
         private List<AttackInputEnum> m_attackInputs;
 
@@ -32,7 +32,7 @@ namespace Attack
         private void Start()
         {
             m_attackInputs = new List<AttackInputEnum>();
-            m_currentFrameCount = 0;
+            m_currentAttackStopTime = 0;
             m_currentRunningAttack = null;
         }
 
@@ -55,11 +55,11 @@ namespace Attack
                 m_currentRunningAttack.UpdateAttack();
             }
 
-            if (m_currentFrameCount < 0) // Update frame counter to allow attack buffer time
+            if (m_currentAttackStopTime < 0) // Update frame counter to allow attack buffer time
             {
-                m_currentFrameCount += 1;
+                m_currentAttackStopTime += Time.deltaTime;
 
-                if (m_currentFrameCount >= 0)
+                if (m_currentAttackStopTime >= 0)
                 {
                     OnAttackRecoilEnd?.Invoke();
                 }
@@ -82,17 +82,18 @@ namespace Attack
 
         public void LaunchAccumulatedAttack() => CheckAndLaunchAttack();
 
-        public void AttackBlocked(int i_blockedFrameCount)
+        public void BlockCurrentAttack()
         {
             if (m_currentRunningAttack == null)
             {
                 return;
             }
 
+            float attackBlockTime = m_currentRunningAttack.GetBlockStopTime();
             m_attackInputs.Clear(); // Clear inputs as we don't want to launch a next attack
             m_currentRunningAttack.ForceEndAttack();
 
-            m_currentFrameCount = i_blockedFrameCount;
+            m_currentAttackStopTime = -attackBlockTime;
             OnAttackRecoilStart?.Invoke();
         }
 
@@ -113,7 +114,7 @@ namespace Attack
             {
                 // In case the opponent has blocked the attack, prevent the player from attacking for sometime
                 if (allowedComboAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack) &&
-                    m_currentFrameCount >= 0)
+                    m_currentAttackStopTime >= 0)
                 {
                     m_currentRunningAttack = allowedComboAttack;
 
@@ -133,7 +134,7 @@ namespace Attack
                     // This is because Sequential Attacks can be both ComboAttacks and BasicAttacks
                     if ((sequentialAttack.CanPlayBasicAttack(m_attackInputs, m_currentRunningAttack) ||
                          sequentialAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack)) &&
-                        m_currentFrameCount >= 0)
+                        m_currentAttackStopTime >= 0)
                     {
                         m_currentRunningAttack = sequentialAttack;
 
@@ -154,7 +155,7 @@ namespace Attack
                 {
                     // In case the opponent has blocked the attack, prevent the player from attacking for sometime
                     if (allowedBaseAttack.CanPlayBasicAttack(m_attackInputs, m_currentRunningAttack) &&
-                        m_currentFrameCount >= 0)
+                        m_currentAttackStopTime >= 0)
                     {
                         m_currentRunningAttack = allowedBaseAttack;
 

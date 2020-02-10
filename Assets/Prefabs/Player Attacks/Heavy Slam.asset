@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Heavy Slam
   allowedAttacks: []
   attackInputs: 00000000000000000300000004000000
-  attackBlockFrameLoss: 10
+  attackBlockStopTime: 1
   attackEnum: 4
   sequentialAttacks: []
   attackRunTime: 2.28

@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Ground Slam
   allowedAttacks: []
   attackInputs: 000000000200000002000000
-  attackBlockFrameLoss: 7
+  attackBlockStopTime: 0.7
   attackEnum: 3
   sequentialAttacks: []
   attackRunTime: 2.11

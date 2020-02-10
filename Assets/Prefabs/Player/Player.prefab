@@ -3097,6 +3097,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 930d2a23de5b6a849a1a8953296bd686, type: 2}
   - {fileID: 11400000, guid: 9e8dfafe657c93a41bd5c3246146651b, type: 2}
   - {fileID: 11400000, guid: c8e101a70f9c3fa4181fd655b62dcad0, type: 2}
+  blockRecoilVelocity: 0.7
 --- !u!114 &8118033384542745791
 MonoBehaviour:
   m_ObjectHideFlags: 0

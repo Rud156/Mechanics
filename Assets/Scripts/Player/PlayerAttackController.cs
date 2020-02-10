@@ -103,8 +103,7 @@ namespace Player
             if (attackBlock)
             {
                 Debug.Log("Attack Recoil Hit");
-
-                attackController.AttackBlocked(attackBlock.AttackBlockFrames);
+                attackController.BlockCurrentAttack();
             }
         }
 

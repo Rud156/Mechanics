@@ -11,7 +11,7 @@ namespace Attack
         [Header("Attack Info")] public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
 
         public List<AttackInputEnum> attackInputs;
-        public int attackBlockFrameLoss;
+        public float attackBlockStopTime;
         public AttackEnum attackEnum;
 
         [Header("Sequential Attack")] public List<BaseAttack> sequentialAttacks;
@@ -70,7 +70,7 @@ namespace Attack
 
         public List<BaseAttack> GetSequentialAttacks() => sequentialAttacks;
 
-        public int GetBlockFrameCount() => attackBlockFrameLoss;
+        public float GetBlockStopTime() => attackBlockStopTime;
 
         public bool IsAttackActive() => m_isAttackActive;
 

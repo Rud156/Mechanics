@@ -368,7 +368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987eb008c30dacd4cabf41cd9c231972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackBlockFrames: 10
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,11 +521,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470361326429796175, guid: f6f01b572e6fcf34c9bd9861126d1724,
-        type: 3}
-      propertyPath: blockRecoilVelocity
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8708656323712303886, guid: f6f01b572e6fcf34c9bd9861126d1724,
         type: 3}

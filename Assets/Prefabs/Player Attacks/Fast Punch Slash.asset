@@ -16,7 +16,7 @@ MonoBehaviour:
   allowedAttacks:
   - {fileID: 11400000, guid: 142a1a56a2eb35740ac82256976719c5, type: 2}
   attackInputs: 00000000
-  attackBlockFrameLoss: 7
+  attackBlockStopTime: 0.7
   attackEnum: 0
   sequentialAttacks:
   - {fileID: 11400000, guid: d4d1f652a6644744bb811d93557eed7c, type: 2}

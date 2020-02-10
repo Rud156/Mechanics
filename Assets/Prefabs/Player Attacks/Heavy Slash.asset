@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Heavy Slash
   allowedAttacks: []
   attackInputs: 00000000
-  attackBlockFrameLoss: 7
+  attackBlockStopTime: 0.7
   attackEnum: 1
   sequentialAttacks:
   - {fileID: 11400000, guid: b671994c137a7f74e923ffb6b6a59387, type: 2}

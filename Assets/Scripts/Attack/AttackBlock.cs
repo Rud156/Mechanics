@@ -4,8 +4,7 @@ namespace Attack
 {
     public class AttackBlock : MonoBehaviour
     {
-        public int attackBlockFrames = 10;
-
-        public int AttackBlockFrames => attackBlockFrames;
+        // This is empty as we just want to use it to notify that this
+        // can block attacks
     }
 }
