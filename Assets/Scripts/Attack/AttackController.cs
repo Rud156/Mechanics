@@ -7,6 +7,7 @@ namespace Attack
     {
         public List<BaseAttack> allowedBaseAttacks;
         public List<BaseAttack> allowedComboAttacks;
+        public float blockRecoilVelocity;
 
         private BaseAttack m_currentRunningAttack;
         private Rigidbody m_targetRb;
@@ -62,6 +63,14 @@ namespace Attack
                 {
                     OnAttackRecoilEnd?.Invoke();
                 }
+
+                Vector3 velocity = -m_targetRb.transform.forward * blockRecoilVelocity;
+                velocity.y = 0;
+                m_targetRb.velocity = new Vector3(
+                    velocity.x,
+                    m_targetRb.velocity.y,
+                    velocity.z
+                );
             }
         }
 

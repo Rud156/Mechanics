@@ -523,6 +523,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7470361326429796175, guid: f6f01b572e6fcf34c9bd9861126d1724,
+        type: 3}
+      propertyPath: blockRecoilVelocity
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8708656323712303886, guid: f6f01b572e6fcf34c9bd9861126d1724,
         type: 3}
       propertyPath: m_Name
