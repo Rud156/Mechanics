@@ -8,53 +8,60 @@ namespace Attack
         public List<BaseAttack> allowedBaseAttacks;
         public List<BaseAttack> allowedComboAttacks;
 
-        private BaseAttack _currentRunningAttack;
-        private Rigidbody _targetRb;
-        private int _currentFrameCount;
+        private BaseAttack m_currentRunningAttack;
+        private Rigidbody m_targetRb;
+        private int m_currentFrameCount;
 
-        private List<AttackInputEnum> _attackInputs;
+        private List<AttackInputEnum> m_attackInputs;
 
-        public delegate void AttackLaunched(AttackEnum attackEnum, string attackAnimTrigger);
-        public delegate void AttackEnded(AttackEnum attackEnum, string attackAnimTrigger);
+        public delegate void AttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger);
+        public delegate void AttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger);
         public delegate void ResetAttackInputs();
-        public delegate void AttackRecoil();
+        public delegate void AttackRecoilStart();
+        public delegate void AttackRecoilEnd();
 
         public AttackLaunched OnAttackLaunched;
         public AttackEnded OnAttackEnded;
         public ResetAttackInputs OnResetAttackInputs;
-        public AttackRecoil OnAttackRecoil;
+        public AttackRecoilStart OnAttackRecoilStart;
+        public AttackRecoilEnd OnAttackRecoilEnd;
 
         #region Unity Functions
 
         private void Start()
         {
-            _attackInputs = new List<AttackInputEnum>();
-            _currentFrameCount = 0;
-            _currentRunningAttack = null;
+            m_attackInputs = new List<AttackInputEnum>();
+            m_currentFrameCount = 0;
+            m_currentRunningAttack = null;
         }
 
         private void Update()
         {
-            if (_currentRunningAttack != null)
+            if (m_currentRunningAttack != null)
             {
-                if (_targetRb != null)
+                if (m_targetRb != null)
                 {
-                    float targetVelocity = _currentRunningAttack.GetAttackVelocity();
-                    Vector3 velocity = _targetRb.transform.forward * targetVelocity;
+                    float targetVelocity = m_currentRunningAttack.GetAttackVelocity();
+                    Vector3 velocity = m_targetRb.transform.forward * targetVelocity;
                     velocity.y = 0;
-                    _targetRb.velocity = new Vector3(
+                    m_targetRb.velocity = new Vector3(
                         velocity.x,
-                        _targetRb.velocity.y,
+                        m_targetRb.velocity.y,
                         velocity.z
                     );
                 }
 
-                _currentRunningAttack.UpdateAttack();
+                m_currentRunningAttack.UpdateAttack();
             }
 
-            if (_currentFrameCount < 0) // Update frame counter to allow attack buffer time
+            if (m_currentFrameCount < 0) // Update frame counter to allow attack buffer time
             {
-                _currentFrameCount += 1;
+                m_currentFrameCount += 1;
+
+                if (m_currentFrameCount >= 0)
+                {
+                    OnAttackRecoilEnd?.Invoke();
+                }
             }
         }
 
@@ -62,29 +69,28 @@ namespace Attack
 
         #region External Functions
 
-        public void AddAttackInput(AttackInputEnum attackInputEnum) => _attackInputs.Add(attackInputEnum);
+        public void AddAttackInput(AttackInputEnum attackInputEnum) => m_attackInputs.Add(attackInputEnum);
 
         public void LaunchAccumulatedAttack() => CheckAndLaunchAttack();
 
-        public void AttackBlocked()
+        public void AttackBlocked(int i_blockedFrameCount)
         {
-            if (_currentRunningAttack == null)
+            if (m_currentRunningAttack == null)
             {
                 return;
             }
 
-            int blockFrameCount = _currentRunningAttack.GetBlockFrameCount();
-            _attackInputs.Clear(); // Clear inputs as we don't want to launch a next attack
-            _currentRunningAttack.ForceEndAttack();
+            m_attackInputs.Clear(); // Clear inputs as we don't want to launch a next attack
+            m_currentRunningAttack.ForceEndAttack();
 
-            _currentFrameCount = blockFrameCount;
-            OnAttackRecoil?.Invoke();
+            m_currentFrameCount = i_blockedFrameCount;
+            OnAttackRecoilStart?.Invoke();
         }
 
         public Rigidbody TargetRb
         {
-            get => _targetRb;
-            set => _targetRb = value;
+            get => m_targetRb;
+            set => m_targetRb = value;
         }
 
         #endregion
@@ -97,10 +103,10 @@ namespace Attack
             foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
             {
                 // In case the opponent has blocked the attack, prevent the player from attacking for sometime
-                if (allowedComboAttack.CanPlayComboAttack(_attackInputs, _currentRunningAttack) &&
-                    _currentFrameCount >= 0)
+                if (allowedComboAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack) &&
+                    m_currentFrameCount >= 0)
                 {
-                    _currentRunningAttack = allowedComboAttack;
+                    m_currentRunningAttack = allowedComboAttack;
 
                     allowedComboAttack.OnAttackLaunched += HandleAttackLaunched;
                     allowedComboAttack.OnAttackEnded += HandleAttackEnded;
@@ -111,16 +117,16 @@ namespace Attack
                 }
             }
 
-            if (_currentRunningAttack != null && !attackSelected)
+            if (m_currentRunningAttack != null && !attackSelected)
             {
-                foreach (BaseAttack sequentialAttack in _currentRunningAttack.GetSequentialAttacks())
+                foreach (BaseAttack sequentialAttack in m_currentRunningAttack.GetSequentialAttacks())
                 {
                     // This is because Sequential Attacks can be both ComboAttacks and BasicAttacks
-                    if ((sequentialAttack.CanPlayBasicAttack(_attackInputs, _currentRunningAttack) ||
-                         sequentialAttack.CanPlayComboAttack(_attackInputs, _currentRunningAttack)) &&
-                        _currentFrameCount >= 0)
+                    if ((sequentialAttack.CanPlayBasicAttack(m_attackInputs, m_currentRunningAttack) ||
+                         sequentialAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack)) &&
+                        m_currentFrameCount >= 0)
                     {
-                        _currentRunningAttack = sequentialAttack;
+                        m_currentRunningAttack = sequentialAttack;
 
                         sequentialAttack.OnAttackLaunched += HandleAttackLaunched;
                         sequentialAttack.OnAttackEnded += HandleAttackEnded;
@@ -138,10 +144,10 @@ namespace Attack
                 foreach (BaseAttack allowedBaseAttack in allowedBaseAttacks)
                 {
                     // In case the opponent has blocked the attack, prevent the player from attacking for sometime
-                    if (allowedBaseAttack.CanPlayBasicAttack(_attackInputs, _currentRunningAttack) &&
-                        _currentFrameCount >= 0)
+                    if (allowedBaseAttack.CanPlayBasicAttack(m_attackInputs, m_currentRunningAttack) &&
+                        m_currentFrameCount >= 0)
                     {
-                        _currentRunningAttack = allowedBaseAttack;
+                        m_currentRunningAttack = allowedBaseAttack;
 
                         allowedBaseAttack.OnAttackLaunched += HandleAttackLaunched;
                         allowedBaseAttack.OnAttackEnded += HandleAttackEnded;
@@ -153,24 +159,24 @@ namespace Attack
                 }
             }
 
-            _attackInputs.Clear();
+            m_attackInputs.Clear();
             if (!attackSelected)
             {
-                _currentRunningAttack = null;
+                m_currentRunningAttack = null;
                 OnResetAttackInputs?.Invoke();
             }
         }
 
-        private void HandleAttackLaunched(AttackEnum attackEnum, string attackAnimTrigger)
+        private void HandleAttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger)
         {
-            _currentRunningAttack.OnAttackLaunched -= HandleAttackLaunched;
-            OnAttackLaunched?.Invoke(attackEnum, attackAnimTrigger);
+            m_currentRunningAttack.OnAttackLaunched -= HandleAttackLaunched;
+            OnAttackLaunched?.Invoke(i_attackEnum, i_attackAnimTrigger);
         }
 
-        private void HandleAttackEnded(AttackEnum attackEnum, string attackAnimTrigger)
+        private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger)
         {
-            _currentRunningAttack.OnAttackEnded -= HandleAttackEnded;
-            OnAttackEnded?.Invoke(attackEnum, attackAnimTrigger);
+            m_currentRunningAttack.OnAttackEnded -= HandleAttackEnded;
+            OnAttackEnded?.Invoke(i_attackEnum, i_attackAnimTrigger);
 
             CheckAndLaunchAttack();
         }

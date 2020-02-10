@@ -20,33 +20,33 @@ namespace Attack
         public string attackAnimTrigger;
         public float attackLifeTimeForwardForce;
 
-        private float _currentRunTime;
-        private bool _isAttackActive;
+        private float m_currentRunTime;
+        private bool m_isAttackActive;
 
-        public delegate void AttackLaunched(AttackEnum attackEnum, string attackAnimTrigger);
-        public delegate void AttackEnded(AttackEnum attackEnum, string attackAnimTrigger);
+        public delegate void AttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger);
+        public delegate void AttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger);
 
         public AttackLaunched OnAttackLaunched;
         public AttackEnded OnAttackEnded;
 
         #region External Functions
 
-        public bool CanPlayComboAttack(List<AttackInputEnum> attackInputEnums, BaseAttack previousAttack)
+        public bool CanPlayComboAttack(List<AttackInputEnum> i_attackInputEnums, BaseAttack i_previousAttack)
         {
             // Probably Contains Will Not Work Because of Instancing
-            if (allowedAttacks.Count != 0 && !allowedAttacks.Contains(previousAttack))
+            if (allowedAttacks.Count != 0 && !allowedAttacks.Contains(i_previousAttack))
             {
                 return false;
             }
 
-            if (attackInputEnums.Count != attackInputs.Count)
+            if (i_attackInputEnums.Count != attackInputs.Count)
             {
                 return false;
             }
 
-            for (int i = 0; i < attackInputEnums.Count; i++)
+            for (int i = 0; i < i_attackInputEnums.Count; i++)
             {
-                if (attackInputEnums[i] != attackInputs[i])
+                if (i_attackInputEnums[i] != attackInputs[i])
                 {
                     return false;
                 }
@@ -55,15 +55,15 @@ namespace Attack
             return true;
         }
 
-        public bool CanPlayBasicAttack(List<AttackInputEnum> attackInputEnums, BaseAttack previousAttack)
+        public bool CanPlayBasicAttack(List<AttackInputEnum> i_attackInputEnums, BaseAttack i_previousAttack)
         {
-            if (allowedAttacks.Count != 0 && !allowedAttacks.Contains(previousAttack))
+            if (allowedAttacks.Count != 0 && !allowedAttacks.Contains(i_previousAttack))
             {
                 return false;
             }
 
             AttackInputEnum attackKey = attackInputs[0];
-            return attackInputEnums.Contains(attackKey);
+            return i_attackInputEnums.Contains(attackKey);
         }
 
         public float GetAttackVelocity() => attackLifeTimeForwardForce;
@@ -72,14 +72,14 @@ namespace Attack
 
         public int GetBlockFrameCount() => attackBlockFrameLoss;
 
-        public bool IsAttackActive() => _isAttackActive;
+        public bool IsAttackActive() => m_isAttackActive;
 
         #region LifeCycle
 
         public void LaunchAttack()
         {
-            _currentRunTime = attackRunTime;
-            _isAttackActive = true;
+            m_currentRunTime = attackRunTime;
+            m_isAttackActive = true;
 
             OnAttackLaunched?.Invoke(attackEnum, attackAnimTrigger);
 
@@ -88,9 +88,9 @@ namespace Attack
 
         public void UpdateAttack()
         {
-            _currentRunTime -= Time.deltaTime;
+            m_currentRunTime -= Time.deltaTime;
 
-            if (_currentRunTime <= 0)
+            if (m_currentRunTime <= 0)
             {
                 EndAttack();
             }
@@ -108,8 +108,8 @@ namespace Attack
 
         private void EndAttack()
         {
-            _currentRunTime = 0;
-            _isAttackActive = false;
+            m_currentRunTime = 0;
+            m_isAttackActive = false;
 
             Debug.Log($"Attack Ended: {name}");
 

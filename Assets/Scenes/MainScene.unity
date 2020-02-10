@@ -274,6 +274,7 @@ GameObject:
   - component: {fileID: 1924879511}
   - component: {fileID: 1924879510}
   - component: {fileID: 1924879509}
+  - component: {fileID: 1924879513}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -355,6 +356,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1924879513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924879508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 987eb008c30dacd4cabf41cd9c231972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackBlockFrames: 10
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,13 +454,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2138677391}
-  m_LocalRotation: {x: 0.47425118, y: -0, z: -0, w: 0.88038963}
+  m_LocalRotation: {x: 0.6845764, y: 0.4257979, z: -0.53253895, w: 0.25778618}
   m_LocalPosition: {x: 0.24, y: 3, z: 4.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 56.621002, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 53.751003, y: -120.477005, z: -211.43999}
 --- !u!1001 &2986316763196247859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -467,7 +481,7 @@ PrefabInstance:
     - target: {fileID: 5656526706211696925, guid: f6f01b572e6fcf34c9bd9861126d1724,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.34
+      value: -0.95
       objectReference: {fileID: 0}
     - target: {fileID: 5656526706211696925, guid: f6f01b572e6fcf34c9bd9861126d1724,
         type: 3}
@@ -593,13 +607,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5553107208329423765}
-  m_LocalRotation: {x: -0, y: -0.00000035762784, z: -0, w: -1}
-  m_LocalPosition: {x: 0, y: 2, z: -5}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -4.5, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &5553107208329423770
 MonoBehaviour:
   m_ObjectHideFlags: 0

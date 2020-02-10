@@ -1,20 +1,23 @@
 ﻿using Attack;
+using Common;
 using UnityEngine;
+using Utils;
 
 namespace Player
 {
     public class PlayerAttackController : MonoBehaviour
     {
         private static readonly int BaseAttackParam = Animator.StringToHash("Attack");
-        private static readonly int RecoilImpactParam = Animator.StringToHash("RImapct");
+        private static readonly int RecoilImpactParam = Animator.StringToHash("RImpact");
 
+        public CollisionNotifier collisionNotifier;
         public AttackController attackController;
         public Animator playerAnimator;
         public Rigidbody playerRb;
         public float attackStartDelay; // Given as the player might want to start with combos
 
-        private float _currentAttackDelay;
-        private bool _attackLaunched;
+        private float m_currentAttackDelay;
+        private bool m_attackLaunched;
 
         #region Unity Functions
 
@@ -23,10 +26,13 @@ namespace Player
             attackController.OnAttackLaunched += HandleAttackLaunched;
             attackController.OnAttackEnded += HandleAttackEnded;
             attackController.OnResetAttackInputs += HandleResetAttackInputs;
-            attackController.OnAttackRecoil += HandleAttackRecoil;
+            attackController.OnAttackRecoilStart += HandleAttackRecoilStart;
+            attackController.OnAttackRecoilEnd += HandleAttackRecoilEnd;
 
-            _currentAttackDelay = attackStartDelay;
-            _attackLaunched = false;
+            collisionNotifier.OnSolidCollisionEnter += HandleSwordCollisionEnter;
+
+            m_currentAttackDelay = attackStartDelay;
+            m_attackLaunched = false;
 
             attackController.TargetRb = playerRb;
         }
@@ -36,20 +42,22 @@ namespace Player
             attackController.OnAttackLaunched -= HandleAttackLaunched;
             attackController.OnAttackEnded -= HandleAttackEnded;
             attackController.OnResetAttackInputs -= HandleResetAttackInputs;
-            attackController.OnAttackRecoil -= HandleAttackRecoil;
+            attackController.OnAttackRecoilStart -= HandleAttackRecoilStart;
+
+            collisionNotifier.OnSolidCollisionEnter -= HandleSwordCollisionEnter;
         }
 
         private void Update()
         {
             RegisterAttackInputs();
 
-            if (_currentAttackDelay > 0)
+            if (m_currentAttackDelay > 0)
             {
-                _currentAttackDelay -= Time.deltaTime;
+                m_currentAttackDelay -= Time.deltaTime;
             }
             else
             {
-                if (!_attackLaunched)
+                if (!m_attackLaunched)
                 {
                     attackController.LaunchAccumulatedAttack();
                 }
@@ -84,28 +92,49 @@ namespace Player
             }
         }
 
-        private void HandleAttackLaunched(AttackEnum attackEnum, string attackAnimTrigger)
+        private void HandleSwordCollisionEnter(Collision i_other)
         {
-            _attackLaunched = true;
-            playerAnimator.SetBool(BaseAttackParam, true);
-            playerAnimator.SetTrigger(attackAnimTrigger);
+            if (!m_attackLaunched)
+            {
+                return;
+            }
+
+            AttackBlock attackBlock = i_other.gameObject.GetComponent<AttackBlock>();
+            if (attackBlock)
+            {
+                Debug.Log("Attack Recoil Hit");
+
+                attackController.AttackBlocked(attackBlock.AttackBlockFrames);
+            }
         }
 
-        private void HandleAttackEnded(AttackEnum attackEnum, string attackAnimTrigger)
+        private void HandleAttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger)
         {
-            _attackLaunched = false;
+            m_attackLaunched = true;
+            playerAnimator.SetBool(BaseAttackParam, true);
+            playerAnimator.SetTrigger(i_attackAnimTrigger);
+        }
+
+        private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger)
+        {
+            m_attackLaunched = false;
             playerAnimator.SetBool(BaseAttackParam, false);
-            playerAnimator.ResetTrigger(attackAnimTrigger);
+            playerAnimator.ResetTrigger(i_attackAnimTrigger);
         }
 
         private void HandleResetAttackInputs()
         {
-            _currentAttackDelay = attackStartDelay; // Reset timer to check for inputs
+            m_currentAttackDelay = attackStartDelay; // Reset timer to check for inputs
         }
 
-        private void HandleAttackRecoil()
+        private void HandleAttackRecoilStart()
         {
             playerAnimator.SetTrigger(RecoilImpactParam);
+        }
+
+        private void HandleAttackRecoilEnd()
+        {
+            playerAnimator.ResetTrigger(RecoilImpactParam);
         }
 
         #endregion
