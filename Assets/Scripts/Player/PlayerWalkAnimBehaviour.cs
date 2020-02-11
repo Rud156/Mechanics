@@ -11,7 +11,7 @@ namespace Player
             int movementDirection = animator.GetInteger(MoveDirectionParam);
             if (movementDirection != 0)
             {
-                animator.speed = movementDirection;
+                // Don't do anything here
             }
         }
 

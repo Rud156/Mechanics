@@ -79,7 +79,7 @@ namespace Player
             );
 
             playerAnimator.SetBool(MoveParam, m_movementDirection != 0);
-            playerAnimator.SetInteger(MoveDirectionParam, m_movementDirection);
+            playerAnimator.SetFloat(MoveDirectionParam, m_movementDirection);
         }
 
         #endregion
