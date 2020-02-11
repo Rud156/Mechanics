@@ -4,9 +4,17 @@ namespace Utils
 {
     public static class ControlConstants
     {
-        public const KeyCode Attack_1 = KeyCode.Q;
-        public const KeyCode Attack_2 = KeyCode.W;
-        public const KeyCode Attack_3 = KeyCode.A;
-        public const KeyCode Attack_4 = KeyCode.S;
+        // Movement Keys
+        public const KeyCode Forward = KeyCode.RightArrow;
+        public const KeyCode ForwardAlt = KeyCode.D;
+        public const KeyCode Backward = KeyCode.LeftArrow;
+        public const KeyCode BackwardAlt = KeyCode.A;
+        public const KeyCode Jump = KeyCode.Space;
+
+        // Attack Keys
+        public const KeyCode Attack_1 = KeyCode.J;
+        public const KeyCode Attack_2 = KeyCode.K;
+        public const KeyCode Attack_3 = KeyCode.N;
+        public const KeyCode Attack_4 = KeyCode.M;
     }
 }
