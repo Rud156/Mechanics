@@ -14,29 +14,43 @@ namespace Player
         [Header("Movement")] public float moveSpeed;
         public float airMoveSpeed;
 
-        [Header("Jump")] public float jumpLaunchSpeed;
+        [Header("Jump and Fall")] public float jumpLaunchSpeed;
+        public float fallSpeedIncrementer;
+        public float fallSpeedTolerance;
+        public float disableFallAfterLand;
 
         [Header("Components")] public Rigidbody playerRb;
         public Animator playerAnimator;
+        public PlayerCollisionDetector playerCollisionDetector;
 
+        private float m_currentLandTime;
         private int m_movementDirection;
         private bool m_lastFrameJumped;
-
-        private bool m_isOnGround; // Later use a collision checker to handle this
 
         #region Unity Functions
 
         private void Start()
         {
+            playerCollisionDetector.OnPlayerLanded += HandlePlayerLanding;
+
             m_movementDirection = 0;
             m_lastFrameJumped = false;
+        }
 
-            m_isOnGround = true;
+        private void OnDestroy()
+        {
+            playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
         }
 
         private void Update()
         {
+            if (m_currentLandTime > 0)
+            {
+                m_currentLandTime -= Time.deltaTime;
+            }
+
             HandleInputs();
+            UpdatePlayerJumpState();
         }
 
         private void FixedUpdate()
@@ -47,6 +61,8 @@ namespace Player
         #endregion
 
         #region Utility Functions
+
+        #region Inputs
 
         private void HandleInputs()
         {
@@ -64,12 +80,63 @@ namespace Player
             if (Input.GetKeyDown(ControlConstants.Jump))
             {
                 m_lastFrameJumped = true;
+                HandlePlayerJumpActivated();
             }
         }
 
+        #endregion
+
+        #region Jumping
+
+        private void HandlePlayerJumpActivated()
+        {
+            if (!m_lastFrameJumped || !playerCollisionDetector.IsPlayerOnGround)
+            {
+                return;
+            }
+
+            playerRb.velocity = new Vector3(
+                playerRb.velocity.x,
+                jumpLaunchSpeed,
+                playerRb.velocity.z
+            );
+
+            playerAnimator.SetTrigger(JumpParam);
+        }
+
+        private void UpdatePlayerJumpState()
+        {
+            if (playerRb.velocity.y > -fallSpeedTolerance || m_currentLandTime > 0)
+            {
+                return;
+            }
+
+            // Increase fall speed as the player falls
+            playerRb.velocity = new Vector3(
+                playerRb.velocity.x,
+                playerRb.velocity.y - fallSpeedIncrementer,
+                playerRb.velocity.z
+            );
+
+            playerAnimator.SetBool(FallingParam, true);
+        }
+
+        private void HandlePlayerLanding()
+        {
+            m_currentLandTime = disableFallAfterLand;
+
+            playerAnimator.SetBool(FallingParam, false);
+            playerAnimator.SetTrigger(LandParam);
+            playerAnimator.ResetTrigger(JumpParam);
+        }
+
+        #endregion
+
+        #region Movement
+
         private void HandlePlayerHorizontalMovement()
         {
-            float movementSpeed = m_isOnGround ? moveSpeed : airMoveSpeed;
+            float movementSpeed = playerCollisionDetector.IsPlayerOnGround ? moveSpeed : airMoveSpeed;
             Vector3 movementVelocity = m_movementDirection * movementSpeed * transform.forward;
 
             playerRb.velocity = new Vector3(
@@ -81,6 +148,8 @@ namespace Player
             playerAnimator.SetBool(MoveParam, m_movementDirection != 0);
             playerAnimator.SetFloat(MoveDirectionParam, m_movementDirection);
         }
+
+        #endregion
 
         #endregion
     }

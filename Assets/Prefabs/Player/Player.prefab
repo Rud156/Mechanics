@@ -3003,6 +3003,8 @@ GameObject:
   - component: {fileID: 27546463}
   - component: {fileID: 7470361326429796175}
   - component: {fileID: 8118033384542745791}
+  - component: {fileID: 2986316763196247863}
+  - component: {fileID: 2986316763196247864}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -3115,3 +3117,44 @@ MonoBehaviour:
   playerAnimator: {fileID: 4022764822178872553}
   playerRb: {fileID: 27546463}
   attackStartDelay: 0.7
+--- !u!114 &2986316763196247863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708656323712303886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8eeb86dabfb75409845fdaac29bdb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  airMoveSpeed: 0.7
+  jumpLaunchSpeed: 10
+  fallSpeedIncrementer: 0.3
+  fallSpeedTolerance: 0.5
+  disableFallAfterLand: 0.3
+  playerRb: {fileID: 27546463}
+  playerAnimator: {fileID: 4022764822178872553}
+  playerCollisionDetector: {fileID: 2986316763196247864}
+--- !u!114 &2986316763196247864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708656323712303886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e05850d9d2477c4eb3f8db32554be0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rayCastDistance: 0.5
+  rayCastPlayerPositionOffset: {x: 0, y: 0, z: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 55
+  isDebugActive: 1
+  rayCastColor: {r: 1, g: 0, b: 0, a: 1}
+  rayCastTime: 0.3
