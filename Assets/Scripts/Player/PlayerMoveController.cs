@@ -37,10 +37,7 @@ namespace Player
             m_lastFrameJumped = false;
         }
 
-        private void OnDestroy()
-        {
-            playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
-        }
+        private void OnDestroy() => playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
 
         private void Update()
         {
@@ -53,9 +50,22 @@ namespace Player
             UpdatePlayerJumpState();
         }
 
-        private void FixedUpdate()
+        private void FixedUpdate() => HandlePlayerHorizontalMovement();
+
+        #endregion
+
+        #region External Functions
+
+        public void RegisterInputs(int i_moveDirection, bool i_jumpPressed)
         {
-            HandlePlayerHorizontalMovement();
+            m_movementDirection = i_moveDirection;
+
+            m_lastFrameJumped = false;
+            if (i_jumpPressed)
+            {
+                m_lastFrameJumped = true;
+                HandlePlayerJumpActivated();
+            }
         }
 
         #endregion

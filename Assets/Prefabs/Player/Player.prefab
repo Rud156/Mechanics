@@ -3093,12 +3093,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd54a0e6c8524646b82851ed102d7ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowedInAirAttacks:
+  - {fileID: 11400000, guid: 5c10ae3ecaef4494fbc18a432e4f1f51, type: 2}
   allowedBaseAttacks:
   - {fileID: 11400000, guid: 142a1a56a2eb35740ac82256976719c5, type: 2}
   allowedComboAttacks:
   - {fileID: 11400000, guid: 930d2a23de5b6a849a1a8953296bd686, type: 2}
   - {fileID: 11400000, guid: 9e8dfafe657c93a41bd5c3246146651b, type: 2}
   - {fileID: 11400000, guid: c8e101a70f9c3fa4181fd655b62dcad0, type: 2}
+  - {fileID: 11400000, guid: b9d78d24beb0b274fb8e036f744a96ba, type: 2}
   blockRecoilVelocity: 0.7
 --- !u!114 &8118033384542745791
 MonoBehaviour:
@@ -3112,6 +3115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2235e4bd027a744a52d151b321ec36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCollisionDetector: {fileID: 2986316763196247864}
   collisionNotifier: {fileID: 7007231992806856330}
   attackController: {fileID: 7470361326429796175}
   playerAnimator: {fileID: 4022764822178872553}

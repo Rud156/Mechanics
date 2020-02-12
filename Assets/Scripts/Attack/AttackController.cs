@@ -5,6 +5,7 @@ namespace Attack
 {
     public class AttackController : MonoBehaviour
     {
+        public List<BaseAttack> allowedInAirAttacks;
         public List<BaseAttack> allowedBaseAttacks;
         public List<BaseAttack> allowedComboAttacks;
         public float blockRecoilVelocity;
@@ -14,6 +15,7 @@ namespace Attack
         private float m_currentAttackStopTime;
 
         private List<AttackInputEnum> m_attackInputs;
+        private bool m_isInAir;
 
         public delegate void AttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger);
         public delegate void AttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger);
@@ -103,6 +105,12 @@ namespace Attack
             set => m_targetRb = value;
         }
 
+        public bool IsInAir
+        {
+            get => m_isInAir;
+            set => m_isInAir = value;
+        }
+
         #endregion
 
         #region Utility Functions
@@ -110,20 +118,46 @@ namespace Attack
         private void CheckAndLaunchAttack()
         {
             bool attackSelected = false;
-            foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
+
+            if (m_isInAir)
             {
-                // In case the opponent has blocked the attack, prevent the player from attacking for sometime
-                if (allowedComboAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack) &&
-                    m_currentAttackStopTime >= 0)
+                foreach (BaseAttack allowedInAirAttack in allowedInAirAttacks)
                 {
-                    m_currentRunningAttack = allowedComboAttack;
+                    if ((allowedInAirAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack) ||
+                         allowedInAirAttack.CanPlayBasicAttack(m_attackInputs, m_currentRunningAttack)) &&
+                        m_currentAttackStopTime >= 0)
+                    {
+                        m_currentRunningAttack.ForceEndAttack();
 
-                    allowedComboAttack.OnAttackLaunched += HandleAttackLaunched;
-                    allowedComboAttack.OnAttackEnded += HandleAttackEnded;
-                    allowedComboAttack.LaunchAttack();
+                        m_currentRunningAttack = allowedInAirAttack;
 
-                    attackSelected = true;
-                    break;
+                        allowedInAirAttack.OnAttackLaunched += HandleAttackLaunched;
+                        allowedInAirAttack.OnAttackEnded += HandleAttackEnded;
+                        allowedInAirAttack.LaunchAttack();
+
+                        attackSelected = true;
+                        break;
+                    }
+                }
+            }
+
+            if (m_currentRunningAttack != null && !attackSelected)
+            {
+                foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
+                {
+                    // In case the opponent has blocked the attack, prevent the player from attacking for sometime
+                    if (allowedComboAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack) &&
+                        m_currentAttackStopTime >= 0)
+                    {
+                        m_currentRunningAttack = allowedComboAttack;
+
+                        allowedComboAttack.OnAttackLaunched += HandleAttackLaunched;
+                        allowedComboAttack.OnAttackEnded += HandleAttackEnded;
+                        allowedComboAttack.LaunchAttack();
+
+                        attackSelected = true;
+                        break;
+                    }
                 }
             }
 
