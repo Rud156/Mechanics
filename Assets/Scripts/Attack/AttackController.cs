@@ -5,7 +5,7 @@ namespace Attack
 {
     public class AttackController : MonoBehaviour
     {
-        public List<BaseAttack> allowedInAirAttacks;
+        public List<BaseAttack> allowedJustLandAttacks;
         public List<BaseAttack> allowedBaseAttacks;
         public List<BaseAttack> allowedComboAttacks;
         public float blockRecoilVelocity;
@@ -18,9 +18,13 @@ namespace Attack
         private bool m_isInAir;
 
         public delegate void AttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger);
+
         public delegate void AttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger);
+
         public delegate void ResetAttackInputs();
+
         public delegate void AttackRecoilStart();
+
         public delegate void AttackRecoilEnd();
 
         public AttackLaunched OnAttackLaunched;
@@ -84,6 +88,10 @@ namespace Attack
 
         public void LaunchAccumulatedAttack() => CheckAndLaunchAttack();
 
+        public void LaunchJustLandAttacks() => CheckAndLaunchJustLandAttacks();
+
+        public void ClearAttackInputs() => m_attackInputs.Clear();
+
         public void BlockCurrentAttack()
         {
             if (m_currentRunningAttack == null)
@@ -119,29 +127,7 @@ namespace Attack
         {
             bool attackSelected = false;
 
-            if (m_isInAir)
-            {
-                foreach (BaseAttack allowedInAirAttack in allowedInAirAttacks)
-                {
-                    if ((allowedInAirAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack) ||
-                         allowedInAirAttack.CanPlayBasicAttack(m_attackInputs, m_currentRunningAttack)) &&
-                        m_currentAttackStopTime >= 0)
-                    {
-                        m_currentRunningAttack.ForceEndAttack();
-
-                        m_currentRunningAttack = allowedInAirAttack;
-
-                        allowedInAirAttack.OnAttackLaunched += HandleAttackLaunched;
-                        allowedInAirAttack.OnAttackEnded += HandleAttackEnded;
-                        allowedInAirAttack.LaunchAttack();
-
-                        attackSelected = true;
-                        break;
-                    }
-                }
-            }
-
-            if (m_currentRunningAttack != null && !attackSelected)
+            if (!attackSelected)
             {
                 foreach (BaseAttack allowedComboAttack in allowedComboAttacks)
                 {
@@ -208,6 +194,38 @@ namespace Attack
             {
                 m_currentRunningAttack = null;
                 OnResetAttackInputs?.Invoke();
+            }
+        }
+
+        private void CheckAndLaunchJustLandAttacks()
+        {
+            bool attackSelected = false;
+            foreach (BaseAttack allowedInAirAttack in allowedJustLandAttacks)
+            {
+                if ((allowedInAirAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack) ||
+                     allowedInAirAttack.CanPlayBasicAttack(m_attackInputs, m_currentRunningAttack)) &&
+                    m_currentAttackStopTime >= 0)
+                {
+                    if (m_currentRunningAttack != null)
+                    {
+                        m_currentRunningAttack.ForceEndAttack();
+                    }
+
+                    m_currentRunningAttack = allowedInAirAttack;
+
+                    allowedInAirAttack.OnAttackLaunched += HandleAttackLaunched;
+                    allowedInAirAttack.OnAttackEnded += HandleAttackEnded;
+                    allowedInAirAttack.LaunchAttack();
+
+                    attackSelected = true;
+                    break;
+                }
+            }
+
+            m_attackInputs.Clear();
+            if (!attackSelected)
+            {
+                m_currentRunningAttack = null;
             }
         }
 

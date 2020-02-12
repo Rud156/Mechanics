@@ -1,7 +1,6 @@
 ﻿using Attack;
 using Common;
 using UnityEngine;
-using Utils;
 
 namespace Player
 {
@@ -16,6 +15,8 @@ namespace Player
         public Animator playerAnimator;
         public Rigidbody playerRb;
 
+        [Header("In Air Launch Speeds")] public float jumpAttackYSpeed;
+
         private bool m_attackLaunched;
 
         #region Unity Functions
@@ -24,7 +25,6 @@ namespace Player
         {
             attackController.OnAttackLaunched += HandleAttackLaunched;
             attackController.OnAttackEnded += HandleAttackEnded;
-            attackController.OnResetAttackInputs += HandleResetAttackInputs;
             attackController.OnAttackRecoilStart += HandleAttackRecoilStart;
             attackController.OnAttackRecoilEnd += HandleAttackRecoilEnd;
 
@@ -40,11 +40,16 @@ namespace Player
         {
             attackController.OnAttackLaunched -= HandleAttackLaunched;
             attackController.OnAttackEnded -= HandleAttackEnded;
-            attackController.OnResetAttackInputs -= HandleResetAttackInputs;
             attackController.OnAttackRecoilStart -= HandleAttackRecoilStart;
+            attackController.OnAttackRecoilEnd -= HandleAttackRecoilEnd;
 
             collisionNotifier.OnSolidCollisionEnter -= HandleSwordCollisionEnter;
             playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
+        }
+
+        private void Update()
+        {
+            attackController.IsInAir = !playerCollisionDetector.IsPlayerOnGround;
         }
 
         #endregion
@@ -71,6 +76,15 @@ namespace Player
             m_attackLaunched = true;
             playerAnimator.SetBool(BaseAttackParam, true);
             playerAnimator.SetTrigger(i_attackAnimTrigger);
+
+            if (i_attackEnum == AttackEnum.FallAtackLaunch)
+            {
+                playerRb.velocity = new Vector3(
+                    playerRb.velocity.x,
+                    jumpAttackYSpeed,
+                    playerRb.velocity.z
+                );
+            }
         }
 
         private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger)
@@ -80,12 +94,14 @@ namespace Player
             playerAnimator.ResetTrigger(i_attackAnimTrigger);
         }
 
-        private void HandleResetAttackInputs()
-        {
-        }
-
         private void HandlePlayerLanding()
         {
+            if (m_attackLaunched)
+            {
+                return;
+            }
+
+            attackController.LaunchJustLandAttacks();
         }
 
         #region Recoil

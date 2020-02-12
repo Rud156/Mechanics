@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Utils;
 
 namespace Player
 {
@@ -11,8 +10,9 @@ namespace Player
         private static readonly int FallingParam = Animator.StringToHash("Falling");
         private static readonly int LandParam = Animator.StringToHash("Land");
 
-        [Header("Movement")] public float moveSpeed;
-        public float airMoveSpeed;
+        [Header("Movement")] public float moveForce;
+        public float airMoveForce;
+        public float maxXZMovementAmount;
 
         [Header("Jump and Fall")] public float jumpLaunchSpeed;
         public float fallSpeedIncrementer;
@@ -46,7 +46,6 @@ namespace Player
                 m_currentLandTime -= Time.deltaTime;
             }
 
-            HandleInputs();
             UpdatePlayerJumpState();
         }
 
@@ -71,30 +70,6 @@ namespace Player
         #endregion
 
         #region Utility Functions
-
-        #region Inputs
-
-        private void HandleInputs()
-        {
-            m_movementDirection = 0;
-            if (Input.GetKey(ControlConstants.Forward) || Input.GetKey(ControlConstants.ForwardAlt))
-            {
-                m_movementDirection = 1;
-            }
-            else if (Input.GetKey(ControlConstants.Backward) || Input.GetKey(ControlConstants.BackwardAlt))
-            {
-                m_movementDirection = -1;
-            }
-
-            m_lastFrameJumped = false;
-            if (Input.GetKeyDown(ControlConstants.Jump))
-            {
-                m_lastFrameJumped = true;
-                HandlePlayerJumpActivated();
-            }
-        }
-
-        #endregion
 
         #region Jumping
 
@@ -146,14 +121,13 @@ namespace Player
 
         private void HandlePlayerHorizontalMovement()
         {
-            float movementSpeed = playerCollisionDetector.IsPlayerOnGround ? moveSpeed : airMoveSpeed;
-            Vector3 movementVelocity = m_movementDirection * movementSpeed * transform.forward;
+            float movementSpeed = playerCollisionDetector.IsPlayerOnGround ? moveForce : airMoveForce;
+            Vector3 movementForce = m_movementDirection * movementSpeed * transform.forward;
 
-            playerRb.velocity = new Vector3(
-                movementVelocity.x,
-                playerRb.velocity.y,
-                movementVelocity.z
-            );
+            if (!(playerRb.velocity.x > maxXZMovementAmount || playerRb.velocity.z > maxXZMovementAmount))
+            {
+                playerRb.AddForce(movementForce, ForceMode.Acceleration);
+            }
 
             playerAnimator.SetBool(MoveParam, m_movementDirection != 0);
             playerAnimator.SetFloat(MoveDirectionParam, m_movementDirection);

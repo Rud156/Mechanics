@@ -86,26 +86,32 @@ namespace Player
         {
             if (Input.GetKeyDown(ControlConstants.Jump))
             {
+                attackController.AddAttackInput(AttackInputEnum.JumpKey);
                 m_attackInputs.Add(AttackInputEnum.JumpKey);
             }
             else if (Input.GetKeyDown(ControlConstants.BaseAttack) || Input.GetMouseButtonDown(0)) // TODO: Remove mouse later on...
             {
+                attackController.AddAttackInput(AttackInputEnum.BaseAttack);
                 m_attackInputs.Add(AttackInputEnum.BaseAttack);
             }
             else if (Input.GetKeyDown(ControlConstants.Attack_1))
             {
+                attackController.AddAttackInput(AttackInputEnum.Attack_1);
                 m_attackInputs.Add(AttackInputEnum.Attack_1);
             }
             else if (Input.GetKeyDown(ControlConstants.Attack_2))
             {
+                attackController.AddAttackInput(AttackInputEnum.Attack_2);
                 m_attackInputs.Add(AttackInputEnum.Attack_2);
             }
             else if (Input.GetKeyDown(ControlConstants.Attack_3))
             {
+                attackController.AddAttackInput(AttackInputEnum.Attack_3);
                 m_attackInputs.Add(AttackInputEnum.Attack_3);
             }
             else if (Input.GetKeyDown(ControlConstants.Attack_4))
             {
+                attackController.AddAttackInput(AttackInputEnum.Attack_4);
                 m_attackInputs.Add(AttackInputEnum.Attack_4);
             }
         }
@@ -120,16 +126,13 @@ namespace Player
                 {
                     m_lastFrameJumped = true;
                     attacksChecked = true;
+
+                    attackController.ClearAttackInputs();
                 }
             }
 
-            if (!attacksChecked)
+            if (!attacksChecked && !m_attackLaunched)
             {
-                foreach (AttackInputEnum attackInputEnum in m_attackInputs)
-                {
-                    attackController.AddAttackInput(attackInputEnum);
-                }
-
                 attacksChecked = true;
                 attackController.LaunchAccumulatedAttack();
             }

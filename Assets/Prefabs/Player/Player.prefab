@@ -3094,7 +3094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd54a0e6c8524646b82851ed102d7ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedInAirAttacks:
+  allowedJustLandAttacks:
   - {fileID: 11400000, guid: 5c10ae3ecaef4494fbc18a432e4f1f51, type: 2}
   allowedBaseAttacks:
   - {fileID: 11400000, guid: 142a1a56a2eb35740ac82256976719c5, type: 2}
@@ -3121,6 +3121,7 @@ MonoBehaviour:
   attackController: {fileID: 7470361326429796175}
   playerAnimator: {fileID: 4022764822178872553}
   playerRb: {fileID: 27546463}
+  jumpAttackYSpeed: 10
 --- !u!114 &2986316763196247863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3133,8 +3134,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8eeb86dabfb75409845fdaac29bdb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  airMoveSpeed: 0.7
+  moveForce: 14
+  airMoveForce: 7
+  maxXZMovementAmount: 10
   jumpLaunchSpeed: 10
   fallSpeedIncrementer: 0.3
   fallSpeedTolerance: 0.5
@@ -3159,7 +3161,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 55
-  isDebugActive: 1
+  isDebugActive: 0
   rayCastColor: {r: 1, g: 0, b: 0, a: 1}
   rayCastTime: 0.3
 --- !u!114 &3338167472937384388
@@ -3177,4 +3179,4 @@ MonoBehaviour:
   attackController: {fileID: 7470361326429796175}
   playerAttackController: {fileID: 8118033384542745791}
   playerMoveController: {fileID: 2986316763196247863}
-  attackStartDelay: 0.5
+  attackStartDelay: 0.7
