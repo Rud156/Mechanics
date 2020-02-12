@@ -3005,6 +3005,7 @@ GameObject:
   - component: {fileID: 8118033384542745791}
   - component: {fileID: 2986316763196247863}
   - component: {fileID: 2986316763196247864}
+  - component: {fileID: 3338167472937384388}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -3120,7 +3121,6 @@ MonoBehaviour:
   attackController: {fileID: 7470361326429796175}
   playerAnimator: {fileID: 4022764822178872553}
   playerRb: {fileID: 27546463}
-  attackStartDelay: 0.7
 --- !u!114 &2986316763196247863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3162,3 +3162,19 @@ MonoBehaviour:
   isDebugActive: 1
   rayCastColor: {r: 1, g: 0, b: 0, a: 1}
   rayCastTime: 0.3
+--- !u!114 &3338167472937384388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708656323712303886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3de55038d14834d9d6dd71e60e24ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackController: {fileID: 7470361326429796175}
+  playerAttackController: {fileID: 8118033384542745791}
+  playerMoveController: {fileID: 2986316763196247863}
+  attackStartDelay: 0.5

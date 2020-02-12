@@ -128,8 +128,10 @@ namespace Player
                 foreach (AttackInputEnum attackInputEnum in m_attackInputs)
                 {
                     attackController.AddAttackInput(attackInputEnum);
-                    attackController.LaunchAccumulatedAttack();
                 }
+
+                attacksChecked = true;
+                attackController.LaunchAccumulatedAttack();
             }
 
             m_attackInputs.Clear();
@@ -143,7 +145,11 @@ namespace Player
 
         private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger) => m_attackLaunched = false;
 
-        private void HandleResetAttackInputs() => m_currentAttackDelay = attackStartDelay;
+        private void HandleResetAttackInputs()
+        {
+            m_currentAttackDelay = attackStartDelay;
+            m_attackInputs.Clear();
+        }
 
         #endregion
 
