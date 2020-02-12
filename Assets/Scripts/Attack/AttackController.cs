@@ -18,13 +18,9 @@ namespace Attack
         private bool m_isInAir;
 
         public delegate void AttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger);
-
         public delegate void AttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger);
-
         public delegate void ResetAttackInputs();
-
         public delegate void AttackRecoilStart();
-
         public delegate void AttackRecoilEnd();
 
         public AttackLaunched OnAttackLaunched;
