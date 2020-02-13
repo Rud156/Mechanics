@@ -98,7 +98,8 @@ namespace Player
         {
             if (m_attackLaunched)
             {
-                return;
+                attackController.ForceStopCurrentAttack();
+                Debug.Log("Forcing Current AttackStop");
             }
 
             attackController.LaunchJustLandAttacks();

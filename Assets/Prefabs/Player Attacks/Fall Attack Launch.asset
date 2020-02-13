@@ -18,6 +18,6 @@ MonoBehaviour:
   attackBlockStopTime: 1
   attackEnum: 6
   sequentialAttacks: []
-  attackRunTime: 0.27
+  attackRunTime: 0.1
   attackAnimTrigger: FALaunch
   attackLifeTimeForwardForce: 1

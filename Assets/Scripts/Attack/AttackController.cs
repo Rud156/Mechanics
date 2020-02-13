@@ -86,6 +86,14 @@ namespace Attack
 
         public void LaunchJustLandAttacks() => CheckAndLaunchJustLandAttacks();
 
+        public void ForceStopCurrentAttack()
+        {
+            if (m_currentRunningAttack != null)
+            {
+                m_currentRunningAttack.ForceEndAttack();
+            }
+        }
+
         public void ClearAttackInputs() => m_attackInputs.Clear();
 
         public void BlockCurrentAttack()

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
   m_Name: Fall Attack Land
   m_EditorClassIdentifier: 
-  name: Fall Attack Launch
+  name: Fall Attack Land
   allowedAttacks: []
   attackInputs: 00000000
   attackBlockStopTime: 1
@@ -20,4 +20,4 @@ MonoBehaviour:
   sequentialAttacks: []
   attackRunTime: 1.11
   attackAnimTrigger: FALand
-  attackLifeTimeForwardForce: 0.5
+  attackLifeTimeForwardForce: 0
