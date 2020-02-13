@@ -3179,4 +3179,4 @@ MonoBehaviour:
   attackController: {fileID: 7470361326429796175}
   playerAttackController: {fileID: 8118033384542745791}
   playerMoveController: {fileID: 2986316763196247863}
-  attackStartDelay: 0.7
+  attackStartDelay: 0.5
