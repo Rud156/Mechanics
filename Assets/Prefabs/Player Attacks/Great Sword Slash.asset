@@ -23,4 +23,4 @@ MonoBehaviour:
   sequentialAttacks: []
   attackRunTime: 3.15
   attackAnimTrigger: GSS
-  attackLifeTimeForwardForce: 1
+  attackLifeTimeForce: {x: 0, y: 0, z: -1}

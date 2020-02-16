@@ -5,6 +5,7 @@ namespace Attack
 {
     public class AttackController : MonoBehaviour
     {
+        public List<BaseAttack> allowedInAirAttacks;
         public List<BaseAttack> allowedJustLandAttacks;
         public List<BaseAttack> allowedBaseAttacks;
         public List<BaseAttack> allowedComboAttacks;
@@ -44,8 +45,8 @@ namespace Attack
             {
                 if (m_targetRb != null)
                 {
-                    float targetVelocity = m_currentRunningAttack.GetAttackVelocity();
-                    Vector3 velocity = m_targetRb.transform.forward * targetVelocity;
+                    Vector3 targetVelocity = m_currentRunningAttack.GetAttackVelocity();
+                    Vector3 velocity = targetVelocity;
                     velocity.y = 0;
                     m_targetRb.velocity = new Vector3(
                         velocity.x,
@@ -82,7 +83,17 @@ namespace Attack
 
         public void AddAttackInput(AttackInputEnum attackInputEnum) => m_attackInputs.Add(attackInputEnum);
 
-        public void LaunchAccumulatedAttack() => CheckAndLaunchAttack();
+        public void LaunchAccumulatedAttack()
+        {
+            if (m_isInAir)
+            {
+                CheckAndLaunchInAirAttack();
+            }
+            else
+            {
+                CheckAndLaunchGroundAttack();
+            }
+        }
 
         public void LaunchJustLandAttacks() => CheckAndLaunchJustLandAttacks();
 
@@ -127,7 +138,35 @@ namespace Attack
 
         #region Utility Functions
 
-        private void CheckAndLaunchAttack()
+        private void CheckAndLaunchInAirAttack()
+        {
+            bool attackSelected = false;
+            foreach (BaseAttack allowedInAirAttack in allowedInAirAttacks)
+            {
+                if ((allowedInAirAttack.CanPlayComboAttack(m_attackInputs, m_currentRunningAttack) ||
+                     allowedInAirAttack.CanPlayBasicAttack(m_attackInputs, m_currentRunningAttack)) &&
+                    m_currentAttackStopTime >= 0)
+                {
+                    m_currentRunningAttack = allowedInAirAttack;
+
+                    allowedInAirAttack.OnAttackLaunched += HandleAttackLaunched;
+                    allowedInAirAttack.OnAttackEnded += HandleAttackEnded;
+                    allowedInAirAttack.LaunchAttack();
+
+                    attackSelected = true;
+                    break;
+                }
+            }
+
+            m_attackInputs.Clear();
+            if (!attackSelected)
+            {
+                m_currentRunningAttack = null;
+                OnResetAttackInputs?.Invoke();
+            }
+        }
+
+        private void CheckAndLaunchGroundAttack()
         {
             bool attackSelected = false;
 
@@ -230,6 +269,7 @@ namespace Attack
             if (!attackSelected)
             {
                 m_currentRunningAttack = null;
+                OnResetAttackInputs?.Invoke();
             }
         }
 
@@ -244,7 +284,7 @@ namespace Attack
             m_currentRunningAttack.OnAttackEnded -= HandleAttackEnded;
             OnAttackEnded?.Invoke(i_attackEnum, i_attackAnimTrigger);
 
-            CheckAndLaunchAttack();
+            CheckAndLaunchGroundAttack();
         }
 
         #endregion

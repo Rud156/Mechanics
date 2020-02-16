@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e209dcec179a9f4aac8eb11591abf0d, type: 3}
-  m_Name: Fall Attack Launch
+  m_Name: Fall Attack
   m_EditorClassIdentifier: 
-  name: Fall Attack Launch
+  name: Fall Attack
   allowedAttacks: []
-  attackInputs: 0000000005000000
+  attackInputs: 00000000
   attackBlockStopTime: 1
   attackEnum: 6
   sequentialAttacks: []
-  attackRunTime: 0.1
-  attackAnimTrigger: FALaunch
-  attackLifeTimeForwardForce: 1
+  attackRunTime: 1.3
+  attackAnimTrigger: FA
+  attackLifeTimeForce: {x: 0, y: -3, z: -1}

@@ -8,7 +8,8 @@ namespace Attack
     {
         public new string name;
 
-        [Header("Attack Info")] public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
+        [Header("Attack Info")]
+        public List<BaseAttack> allowedAttacks; // If List is empty, any attack is allowed to be played before this
 
         public List<AttackInputEnum> attackInputs;
         public float attackBlockStopTime;
@@ -18,7 +19,7 @@ namespace Attack
 
         [Header("Attack Animation")] public float attackRunTime;
         public string attackAnimTrigger;
-        public float attackLifeTimeForwardForce;
+        public Vector3 attackLifeTimeForce;
 
         private float m_currentRunTime;
         private bool m_isAttackActive;
@@ -66,7 +67,7 @@ namespace Attack
             return i_attackInputEnums.Contains(attackKey);
         }
 
-        public float GetAttackVelocity() => attackLifeTimeForwardForce;
+        public Vector3 GetAttackVelocity() => attackLifeTimeForce;
 
         public List<BaseAttack> GetSequentialAttacks() => sequentialAttacks;
 

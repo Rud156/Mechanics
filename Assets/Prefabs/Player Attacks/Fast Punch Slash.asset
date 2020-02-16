@@ -22,4 +22,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d4d1f652a6644744bb811d93557eed7c, type: 2}
   attackRunTime: 1.19
   attackAnimTrigger: FPS
-  attackLifeTimeForwardForce: 0.5
+  attackLifeTimeForce: {x: 0, y: 0, z: -0.5}

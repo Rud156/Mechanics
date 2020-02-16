@@ -21,4 +21,4 @@ MonoBehaviour:
   sequentialAttacks: []
   attackRunTime: 1.09
   attackAnimTrigger: FS
-  attackLifeTimeForwardForce: 0.7
+  attackLifeTimeForce: {x: 0, y: 0, z: -0.7}

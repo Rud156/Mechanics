@@ -15,8 +15,6 @@ namespace Player
         public Animator playerAnimator;
         public Rigidbody playerRb;
 
-        [Header("In Air Launch Speeds")] public float jumpAttackYSpeed;
-
         private bool m_attackLaunched;
 
         #region Unity Functions
@@ -76,15 +74,6 @@ namespace Player
             m_attackLaunched = true;
             playerAnimator.SetBool(BaseAttackParam, true);
             playerAnimator.SetTrigger(i_attackAnimTrigger);
-
-            if (i_attackEnum == AttackEnum.FallAtackLaunch)
-            {
-                playerRb.velocity = new Vector3(
-                    playerRb.velocity.x,
-                    jumpAttackYSpeed,
-                    playerRb.velocity.z
-                );
-            }
         }
 
         private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger)

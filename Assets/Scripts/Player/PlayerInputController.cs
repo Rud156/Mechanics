@@ -78,18 +78,19 @@ namespace Player
                 movementDirection = -1;
             }
 
-            playerMoveController.RegisterInputs(movementDirection, m_lastFrameJumped);
             m_lastFrameJumped = false;
+            if (Input.GetKeyDown(ControlConstants.Jump))
+            {
+                m_lastFrameJumped = true;
+            }
+
+            playerMoveController.RegisterInputs(movementDirection, m_lastFrameJumped);
         }
 
         private void RegisterOtherInputs()
         {
-            if (Input.GetKeyDown(ControlConstants.Jump))
-            {
-                attackController.AddAttackInput(AttackInputEnum.JumpKey);
-                m_attackInputs.Add(AttackInputEnum.JumpKey);
-            }
-            else if (Input.GetKeyDown(ControlConstants.BaseAttack) || Input.GetMouseButtonDown(0)) // TODO: Remove mouse later on...
+            if (Input.GetKeyDown(ControlConstants.BaseAttack) ||
+                Input.GetMouseButtonDown(0)) // TODO: Remove mouse later on...
             {
                 attackController.AddAttackInput(AttackInputEnum.BaseAttack);
                 m_attackInputs.Add(AttackInputEnum.BaseAttack);
@@ -118,22 +119,8 @@ namespace Player
 
         private void CheckAndNotifyInputs()
         {
-            bool attacksChecked = false;
-            if (m_attackInputs.Count == 1)
+            if (!m_attackLaunched)
             {
-                AttackInputEnum attackInputEnum = m_attackInputs[0];
-                if (attackInputEnum == AttackInputEnum.JumpKey) // This means that the player wanted to only jump in the time frame alloted
-                {
-                    m_lastFrameJumped = true;
-                    attacksChecked = true;
-
-                    attackController.ClearAttackInputs();
-                }
-            }
-
-            if (!attacksChecked && !m_attackLaunched)
-            {
-                attacksChecked = true;
                 attackController.LaunchAccumulatedAttack();
             }
 
@@ -144,7 +131,8 @@ namespace Player
 
         #region Event Handlers
 
-        private void HandleAttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger) => m_attackLaunched = true;
+        private void HandleAttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger) =>
+            m_attackLaunched = true;
 
         private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger) => m_attackLaunched = false;
 
