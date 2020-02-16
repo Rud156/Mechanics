@@ -268,7 +268,6 @@ namespace Attack
             m_attackInputs.Clear();
             if (!attackSelected)
             {
-                m_currentRunningAttack = null;
                 OnResetAttackInputs?.Invoke();
             }
         }
@@ -284,7 +283,7 @@ namespace Attack
             m_currentRunningAttack.OnAttackEnded -= HandleAttackEnded;
             OnAttackEnded?.Invoke(i_attackEnum, i_attackAnimTrigger);
 
-            CheckAndLaunchGroundAttack();
+            LaunchAccumulatedAttack();
         }
 
         #endregion
