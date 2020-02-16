@@ -3121,6 +3121,10 @@ MonoBehaviour:
   attackController: {fileID: 7470361326429796175}
   playerAnimator: {fileID: 4022764822178872553}
   playerRb: {fileID: 27546463}
+  attackedCameraShakeData: {fileID: 11400000, guid: 1e30cc645bff0a949aa2d7b6f0cf31a0,
+    type: 2}
+  attackBlockedCameraShakeData: {fileID: 11400000, guid: 3ed7f0b685137244bb02837f93234e24,
+    type: 2}
 --- !u!114 &2986316763196247863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3160,6 +3164,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 55
+  cameraShakeData: {fileID: 11400000, guid: ed6c2634232d75545b56433a104872c9, type: 2}
   isDebugActive: 1
   rayCastColor: {r: 1, g: 0, b: 0, a: 1}
   rayCastTime: 0.3

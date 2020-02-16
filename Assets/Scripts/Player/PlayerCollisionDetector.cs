@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CustomCamera;
+using UnityEngine;
 
 namespace Player
 {
@@ -7,6 +8,8 @@ namespace Player
         [Header("RayCast Data")] public float rayCastDistance;
         public Vector3 rayCastPlayerPositionOffset;
         public LayerMask layerMask;
+
+        [Header("Camera Shake")] public CameraShakeData cameraShakeData;
 
         [Header("Debug")] public bool isDebugActive;
         public Color rayCastColor = Color.red;
@@ -55,6 +58,7 @@ namespace Player
         {
             if (m_lastGroundStatus != m_isPlayerOnGround && m_isPlayerOnGround)
             {
+                CameraController.Instance.StartCameraShake(cameraShakeData);
                 OnPlayerLanded?.Invoke();
             }
         }

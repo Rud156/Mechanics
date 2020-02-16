@@ -1,5 +1,6 @@
 ﻿using Attack;
 using Common;
+using CustomCamera;
 using UnityEngine;
 
 namespace Player
@@ -9,11 +10,13 @@ namespace Player
         private static readonly int BaseAttackParam = Animator.StringToHash("Attack");
         private static readonly int RecoilImpactParam = Animator.StringToHash("RImpact");
 
-        public PlayerCollisionDetector playerCollisionDetector;
+        [Header("Components")] public PlayerCollisionDetector playerCollisionDetector;
         public CollisionNotifier collisionNotifier;
         public AttackController attackController;
         public Animator playerAnimator;
         public Rigidbody playerRb;
+
+        [Header("Camera Shake")] public CameraShakeData attackBlockedCameraShakeData;
 
         private bool m_attackLaunched;
 
@@ -95,7 +98,11 @@ namespace Player
 
         #region Recoil
 
-        private void HandleAttackRecoilStart() => playerAnimator.SetTrigger(RecoilImpactParam);
+        private void HandleAttackRecoilStart()
+        {
+            CameraController.Instance.StartCameraShake(attackBlockedCameraShakeData);
+            playerAnimator.SetTrigger(RecoilImpactParam);
+        }
 
         private void HandleAttackRecoilEnd() => playerAnimator.ResetTrigger(RecoilImpactParam);
 

@@ -14,12 +14,6 @@ namespace CustomCamera
         private bool m_cameraShakeActive;
         private float m_shakeTotalTime;
         private float m_shakeMagnitude;
-        private float m_shakeFrequency;
-        private float m_currentFrequencyTime;
-
-        private Vector3 m_targetPosition;
-        private Vector3 m_startPosition;
-        private float m_lerpAmount;
 
         #region Unity Functions
 
@@ -31,27 +25,16 @@ namespace CustomCamera
 
         private void Update()
         {
-            UpdateCameraLerpPosition();
-
             if (!m_cameraShakeActive)
             {
                 return;
             }
 
             m_shakeTotalTime -= Time.deltaTime;
-            m_currentFrequencyTime -= Time.deltaTime;
 
-            if (m_currentFrequencyTime <= 0)
-            {
-                Vector3 shakePositionOffset = Vector3.one * Random.Range(-m_shakeMagnitude, m_shakeMagnitude);
-                shakePositionOffset += m_defaultCameraPosition;
-
-                m_targetPosition = shakePositionOffset;
-                m_startPosition = mainCameraObject.localPosition;
-                m_lerpAmount = 0;
-
-                m_currentFrequencyTime = m_shakeFrequency;
-            }
+            Vector3 shakePositionOffset = Vector3.one * Random.Range(-m_shakeMagnitude, m_shakeMagnitude);
+            shakePositionOffset += m_defaultCameraPosition;
+            mainCameraObject.localPosition = shakePositionOffset;
 
             if (m_shakeTotalTime <= 0)
             {
@@ -63,18 +46,19 @@ namespace CustomCamera
 
         #region External Functions
 
-        public void StartCameraShake(float i_shakeTime, float i_shakeMagnitude, float i_shakeFrequency)
+        public void StartCameraShake(CameraShakeData i_cameraShakeData)
         {
             if (m_cameraShakeActive)
             {
                 return;
             }
 
+            float shakeTime = i_cameraShakeData.shakeTimer;
+            float shakeMagnitude = i_cameraShakeData.shakeMagnitude;
+
             m_cameraShakeActive = true;
-            m_shakeTotalTime = i_shakeTime;
-            m_shakeMagnitude = i_shakeMagnitude;
-            m_shakeFrequency = i_shakeFrequency;
-            m_currentFrequencyTime = 0;
+            m_shakeTotalTime = shakeTime;
+            m_shakeMagnitude = shakeMagnitude;
         }
 
         public void ForceStopCameraShake() => StopShake();
@@ -83,35 +67,10 @@ namespace CustomCamera
 
         #region Utility Functions
 
-        private void UpdateCameraLerpPosition()
-        {
-            if (m_lerpAmount < 1)
-            {
-                m_lerpAmount += lerpSpeed * Time.deltaTime;
-            }
-
-            if (m_lerpAmount >= lerpToleranceAmount)
-            {
-                mainCameraObject.localPosition = m_targetPosition;
-                m_lerpAmount = 1;
-            }
-            else
-            {
-                mainCameraObject.localPosition = Vector3.Lerp(
-                    m_targetPosition,
-                    m_startPosition,
-                    m_lerpAmount
-                );
-            }
-        }
-
         private void StopShake()
         {
             m_cameraShakeActive = false;
-
-            m_targetPosition = m_defaultCameraPosition;
-            m_startPosition = mainCameraObject.localPosition;
-            m_lerpAmount = 0;
+            mainCameraObject.localPosition = m_defaultCameraPosition;
         }
 
         #endregion
