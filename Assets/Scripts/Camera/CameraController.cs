@@ -1,97 +1,81 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using Utils;
 
 namespace CustomCamera
 {
     public class CameraController : MonoBehaviour
     {
-        public Transform mainCameraObject;
+        public List<Transform> targets;
+        public Camera mainCamera;
 
-        [Header("Lerping Data")] public float lerpSpeed;
-        public float lerpToleranceAmount;
+        [Header("Camera Follow")] public float smoothTime = 0.5f;
+        public Vector3 offset;
 
-        private Vector3 m_defaultCameraPosition;
+        [Header("Zoom")] public float minZoomDistance;
+        public float maxZoomDistance;
+        public float minDistanceAmount;
+        public float maxDistanceAmount;
 
-        private bool m_cameraShakeActive;
-        private float m_shakeTotalTime;
-        private float m_shakeMagnitude;
+        private Vector3 m_velocity;
 
         #region Unity Functions
 
-        private void Start()
+        private void LateUpdate()
         {
-            m_defaultCameraPosition = mainCameraObject.localPosition;
-            m_cameraShakeActive = false;
+            MoveCamera();
+            ZoomCamera();
         }
-
-        private void Update()
-        {
-            if (!m_cameraShakeActive)
-            {
-                return;
-            }
-
-            m_shakeTotalTime -= Time.deltaTime;
-
-            Vector3 shakePositionOffset = Vector3.one * Random.Range(-m_shakeMagnitude, m_shakeMagnitude);
-            shakePositionOffset += m_defaultCameraPosition;
-            mainCameraObject.localPosition = shakePositionOffset;
-
-            if (m_shakeTotalTime <= 0)
-            {
-                StopShake();
-            }
-        }
-
-        #endregion
-
-        #region External Functions
-
-        public void StartCameraShake(CameraShakeData i_cameraShakeData)
-        {
-            if (m_cameraShakeActive)
-            {
-                return;
-            }
-
-            float shakeTime = i_cameraShakeData.shakeTimer;
-            float shakeMagnitude = i_cameraShakeData.shakeMagnitude;
-
-            m_cameraShakeActive = true;
-            m_shakeTotalTime = shakeTime;
-            m_shakeMagnitude = shakeMagnitude;
-        }
-
-        public void ForceStopCameraShake() => StopShake();
 
         #endregion
 
         #region Utility Functions
 
-        private void StopShake()
+        private void MoveCamera()
         {
-            m_cameraShakeActive = false;
-            mainCameraObject.localPosition = m_defaultCameraPosition;
+            Vector3 centerPosition = GetCenterPosition();
+            Vector3 newPosition = centerPosition + offset;
+
+            transform.position = Vector3.SmoothDamp(
+                transform.position,
+                newPosition,
+                ref m_velocity,
+                smoothTime
+            );
         }
 
-        #endregion
-
-        #region Singleton
-
-        private static CameraController _instance;
-
-        public static CameraController Instance => _instance;
-
-        private void Awake()
+        private void ZoomCamera()
         {
-            if (_instance == null)
+            float mappedDistance = ExtensionFunctions.Map(
+                GetGreatestDistance(),
+                minDistanceAmount,
+                maxDistanceAmount,
+                1, 0
+            );
+            float newZoom = Mathf.Lerp(maxZoomDistance, minZoomDistance, mappedDistance);
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, newZoom, Time.deltaTime);
+        }
+
+        private float GetGreatestDistance()
+        {
+            Bounds bounds = new Bounds(targets[0].position, Vector3.zero);
+            foreach (Transform target in targets)
             {
-                _instance = this;
+                bounds.Encapsulate(target.position);
             }
 
-            if (_instance != this)
+            return bounds.size.x;
+        }
+
+        private Vector3 GetCenterPosition()
+        {
+            Bounds bounds = new Bounds(targets[0].position, Vector3.zero);
+            foreach (Transform target in targets)
             {
-                Destroy(gameObject);
+                bounds.Encapsulate(target.position);
             }
+
+            return bounds.center;
         }
 
         #endregion

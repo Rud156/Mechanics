@@ -100,7 +100,7 @@ namespace Player
 
         private void HandleAttackRecoilStart()
         {
-            CameraController.Instance.StartCameraShake(attackBlockedCameraShakeData);
+            CameraShaker.Instance.StartCameraShake(attackBlockedCameraShakeData);
             playerAnimator.SetTrigger(RecoilImpactParam);
         }
 

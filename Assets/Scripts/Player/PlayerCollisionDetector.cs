@@ -58,7 +58,7 @@ namespace Player
         {
             if (m_lastGroundStatus != m_isPlayerOnGround && m_isPlayerOnGround)
             {
-                CameraController.Instance.StartCameraShake(cameraShakeData);
+                CameraShaker.Instance.StartCameraShake(cameraShakeData);
                 OnPlayerLanded?.Invoke();
             }
         }
