@@ -64,7 +64,7 @@ namespace CustomCamera
                 bounds.Encapsulate(target.position);
             }
 
-            return bounds.size.x;
+            return bounds.size.z;
         }
 
         private Vector3 GetCenterPosition()
