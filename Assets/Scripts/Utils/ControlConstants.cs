@@ -17,5 +17,6 @@ namespace Utils
         public const KeyCode Attack_2 = KeyCode.K;
         public const KeyCode Attack_3 = KeyCode.N;
         public const KeyCode Attack_4 = KeyCode.M;
+        public const KeyCode BlockKey = KeyCode.B;
     }
 }

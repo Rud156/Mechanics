@@ -18,6 +18,6 @@ MonoBehaviour:
   attackBlockStopTime: 0.7
   attackEnum: 3
   sequentialAttacks: []
-  attackRunTime: 2.11
+  attackRunTime: 1.5
   attackAnimTrigger: GS
   attackLifeTimeForce: {x: 0, y: 0, z: -1}

@@ -8,7 +8,6 @@ namespace Player
     public class PlayerInputController : MonoBehaviour
     {
         public AttackController attackController;
-        public PlayerAttackController playerAttackController;
         public PlayerMoveController playerMoveController;
         public float attackStartDelay; // Given as the player might want to start with combos
 
@@ -114,6 +113,14 @@ namespace Player
             {
                 attackController.AddAttackInput(AttackInputEnum.Attack_4);
                 m_attackInputs.Add(AttackInputEnum.Attack_4);
+            }
+            else if (Input.GetKeyDown(ControlConstants.BlockKey))
+            {
+                attackController.InitiateAttackBlocking();
+            }
+            else if (Input.GetKeyUp(ControlConstants.BlockKey))
+            {
+                attackController.CancelAttackBlocking();
             }
         }
 

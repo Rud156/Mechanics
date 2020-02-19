@@ -2961,8 +2961,6 @@ MonoBehaviour:
   attackController: {fileID: 7470361326429796175}
   playerAnimator: {fileID: 4022764822178872553}
   playerRb: {fileID: 27546463}
-  attackBlockedCameraShakeData: {fileID: 11400000, guid: 3ed7f0b685137244bb02837f93234e24,
-    type: 2}
 --- !u!114 &2986316763196247863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2985,6 +2983,7 @@ MonoBehaviour:
   playerRb: {fileID: 27546463}
   playerAnimator: {fileID: 4022764822178872553}
   playerCollisionDetector: {fileID: 2986316763196247864}
+  attackController: {fileID: 7470361326429796175}
 --- !u!114 &2986316763196247864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3019,6 +3018,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackController: {fileID: 7470361326429796175}
-  playerAttackController: {fileID: 8118033384542745791}
   playerMoveController: {fileID: 2986316763196247863}
   attackStartDelay: 0.5

@@ -1,6 +1,5 @@
 ﻿using Attack;
 using Common;
-using CustomCamera;
 using UnityEngine;
 
 namespace Player
@@ -8,6 +7,7 @@ namespace Player
     public class PlayerAttackController : MonoBehaviour
     {
         private static readonly int BaseAttackParam = Animator.StringToHash("Attack");
+        private static readonly int BlockParam = Animator.StringToHash("Block");
         private static readonly int RecoilImpactParam = Animator.StringToHash("RImpact");
 
         [Header("Components")] public PlayerCollisionDetector playerCollisionDetector;
@@ -16,9 +16,8 @@ namespace Player
         public Animator playerAnimator;
         public Rigidbody playerRb;
 
-        [Header("Camera Shake")] public CameraShakeData attackBlockedCameraShakeData;
-
         private bool m_attackLaunched;
+        private bool m_blockingActive; // In case this is required later on...
 
         #region Unity Functions
 
@@ -28,6 +27,9 @@ namespace Player
             attackController.OnAttackEnded += HandleAttackEnded;
             attackController.OnAttackRecoilStart += HandleAttackRecoilStart;
             attackController.OnAttackRecoilEnd += HandleAttackRecoilEnd;
+
+            attackController.OnAttackBlockingStart += HandleAttackBlockingInitiated;
+            attackController.OnAttackBlockingEnd += HandleAttackBlockingCanceled;
 
             collisionNotifier.OnSolidCollisionEnter += HandleSwordCollisionEnter;
             playerCollisionDetector.OnPlayerLanded += HandlePlayerLanding;
@@ -43,6 +45,9 @@ namespace Player
             attackController.OnAttackEnded -= HandleAttackEnded;
             attackController.OnAttackRecoilStart -= HandleAttackRecoilStart;
             attackController.OnAttackRecoilEnd -= HandleAttackRecoilEnd;
+
+            attackController.OnAttackBlockingStart -= HandleAttackBlockingInitiated;
+            attackController.OnAttackBlockingEnd -= HandleAttackBlockingCanceled;
 
             collisionNotifier.OnSolidCollisionEnter -= HandleSwordCollisionEnter;
             playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
@@ -67,6 +72,19 @@ namespace Player
                 Debug.Log("Attack Recoil Hit");
                 attackController.BlockCurrentAttack();
             }
+        }
+
+        private void HandleAttackBlockingInitiated()
+        {
+            m_blockingActive = true;
+            playerAnimator.SetBool(BaseAttackParam, false); // Ideally this should not be required as the attack has already stopped playing
+            playerAnimator.SetBool(BlockParam, true);
+        }
+
+        private void HandleAttackBlockingCanceled()
+        {
+            m_blockingActive = false;
+            playerAnimator.SetBool(BlockParam, false);
         }
 
         private void HandleAttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger)
@@ -98,11 +116,7 @@ namespace Player
 
         #region Recoil
 
-        private void HandleAttackRecoilStart()
-        {
-            CameraShaker.Instance.StartCameraShake(attackBlockedCameraShakeData);
-            playerAnimator.SetTrigger(RecoilImpactParam);
-        }
+        private void HandleAttackRecoilStart() => playerAnimator.SetTrigger(RecoilImpactParam);
 
         private void HandleAttackRecoilEnd() => playerAnimator.ResetTrigger(RecoilImpactParam);
 

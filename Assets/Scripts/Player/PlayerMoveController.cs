@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Attack;
+using UnityEngine;
 
 namespace Player
 {
@@ -22,22 +23,31 @@ namespace Player
         [Header("Components")] public Rigidbody playerRb;
         public Animator playerAnimator;
         public PlayerCollisionDetector playerCollisionDetector;
+        public AttackController attackController;
 
         private float m_currentLandTime;
         private int m_movementDirection;
         private bool m_lastFrameJumped;
+        private bool m_blockingActive;
 
         #region Unity Functions
 
         private void Start()
         {
+            attackController.OnAttackBlockingStart += HandleBlockingStart;
+            attackController.OnAttackBlockingEnd += HandleBlockingEnd;
             playerCollisionDetector.OnPlayerLanded += HandlePlayerLanding;
 
             m_movementDirection = 0;
             m_lastFrameJumped = false;
         }
 
-        private void OnDestroy() => playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
+        private void OnDestroy()
+        {
+            attackController.OnAttackBlockingStart -= HandleBlockingStart;
+            attackController.OnAttackBlockingEnd -= HandleBlockingEnd;
+            playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
+        }
 
         private void Update()
         {
@@ -71,11 +81,19 @@ namespace Player
 
         #region Utility Functions
 
+        #region Blocking
+
+        private void HandleBlockingStart() => m_blockingActive = true;
+
+        private void HandleBlockingEnd() => m_blockingActive = false;
+
+        #endregion
+
         #region Jumping
 
         private void HandlePlayerJumpActivated()
         {
-            if (!m_lastFrameJumped || !playerCollisionDetector.IsPlayerOnGround)
+            if (!m_lastFrameJumped || !playerCollisionDetector.IsPlayerOnGround || m_blockingActive)
             {
                 return;
             }
@@ -121,6 +139,11 @@ namespace Player
 
         private void HandlePlayerHorizontalMovement()
         {
+            if (m_blockingActive)
+            {
+                return;
+            }
+
             float movementSpeed = playerCollisionDetector.IsPlayerOnGround ? moveForce : airMoveForce;
             Vector3 movementForce = m_movementDirection * movementSpeed * transform.forward;
 

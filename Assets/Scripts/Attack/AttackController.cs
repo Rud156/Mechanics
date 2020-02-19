@@ -17,18 +17,23 @@ namespace Attack
 
         private List<AttackInputEnum> m_attackInputs;
         private bool m_isInAir;
+        private bool m_blockingActive;
 
         public delegate void AttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger);
         public delegate void AttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger);
         public delegate void ResetAttackInputs();
         public delegate void AttackRecoilStart();
         public delegate void AttackRecoilEnd();
+        public delegate void AttackBlockingStart();
+        public delegate void AttackBlockingEnd();
 
         public AttackLaunched OnAttackLaunched;
         public AttackEnded OnAttackEnded;
         public ResetAttackInputs OnResetAttackInputs;
         public AttackRecoilStart OnAttackRecoilStart;
         public AttackRecoilEnd OnAttackRecoilEnd;
+        public AttackBlockingStart OnAttackBlockingStart;
+        public AttackBlockingEnd OnAttackBlockingEnd;
 
         #region Unity Functions
 
@@ -81,10 +86,39 @@ namespace Attack
 
         #region External Functions
 
+        public void InitiateAttackBlocking()
+        {
+            if (m_currentRunningAttack != null || m_isInAir) // Check if this is actually something that will remove references once attacks are complete
+            {
+                Debug.Log("Cannot block when attack is launched or in air");
+                return;
+            }
+
+            m_blockingActive = true;
+            OnAttackBlockingStart?.Invoke();
+        }
+
+        public void CancelAttackBlocking()
+        {
+            if (m_blockingActive) // Only do this if Blocking Mode is on
+            {
+                m_blockingActive = false;
+                OnAttackBlockingEnd?.Invoke();
+            }
+        }
+
         public void AddAttackInput(AttackInputEnum attackInputEnum) => m_attackInputs.Add(attackInputEnum);
 
         public void LaunchAccumulatedAttack()
         {
+            if (m_blockingActive)
+            {
+                Debug.Log("Cannot launch attacks when blocking");
+                m_attackInputs.Clear();
+                OnResetAttackInputs?.Invoke();
+                return;
+            }
+
             if (m_isInAir)
             {
                 CheckAndLaunchInAirAttack();
@@ -95,7 +129,18 @@ namespace Attack
             }
         }
 
-        public void LaunchJustLandAttacks() => CheckAndLaunchJustLandAttacks();
+        public void LaunchJustLandAttacks()
+        {
+            if (m_blockingActive) // Ideally this should never happen. But probably the player can start blocking when in air
+            {
+                Debug.Log("Cannot launch attacks when blocking");
+                m_attackInputs.Clear();
+                OnResetAttackInputs?.Invoke();
+                return;
+            }
+
+            CheckAndLaunchJustLandAttacks();
+        }
 
         public void ForceStopCurrentAttack()
         {
