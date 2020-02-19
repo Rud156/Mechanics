@@ -1,9 +1,9 @@
 ﻿using CustomCamera;
 using UnityEngine;
 
-namespace Player
+namespace Common
 {
-    public class PlayerCollisionDetector : MonoBehaviour
+    public class GroundCollisionDetector : MonoBehaviour
     {
         [Header("RayCast Data")] public float rayCastDistance;
         public Vector3 rayCastPlayerPositionOffset;
@@ -16,7 +16,6 @@ namespace Player
         public float rayCastTime;
 
         public delegate void PlayerLanded();
-
         public PlayerLanded OnPlayerLanded;
 
         private bool m_lastGroundStatus;

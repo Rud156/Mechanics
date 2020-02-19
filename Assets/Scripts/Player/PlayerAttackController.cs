@@ -10,7 +10,7 @@ namespace Player
         private static readonly int BlockParam = Animator.StringToHash("Block");
         private static readonly int RecoilImpactParam = Animator.StringToHash("RImpact");
 
-        [Header("Components")] public PlayerCollisionDetector playerCollisionDetector;
+        [Header("Components")] public GroundCollisionDetector groundCollisionDetector;
         public CollisionNotifier collisionNotifier;
         public AttackController attackController;
         public Animator playerAnimator;
@@ -32,7 +32,7 @@ namespace Player
             attackController.OnAttackBlockingEnd += HandleAttackBlockingCanceled;
 
             collisionNotifier.OnSolidCollisionEnter += HandleSwordCollisionEnter;
-            playerCollisionDetector.OnPlayerLanded += HandlePlayerLanding;
+            groundCollisionDetector.OnPlayerLanded += HandlePlayerLanding;
 
             m_attackLaunched = false;
 
@@ -50,10 +50,10 @@ namespace Player
             attackController.OnAttackBlockingEnd -= HandleAttackBlockingCanceled;
 
             collisionNotifier.OnSolidCollisionEnter -= HandleSwordCollisionEnter;
-            playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
+            groundCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
         }
 
-        private void Update() => attackController.IsInAir = !playerCollisionDetector.IsPlayerOnGround;
+        private void Update() => attackController.IsInAir = !groundCollisionDetector.IsPlayerOnGround;
 
         #endregion
 
@@ -103,7 +103,7 @@ namespace Player
 
         private void HandlePlayerLanding()
         {
-            attackController.IsInAir = !playerCollisionDetector.IsPlayerOnGround;
+            attackController.IsInAir = !groundCollisionDetector.IsPlayerOnGround;
 
             if (m_attackLaunched)
             {

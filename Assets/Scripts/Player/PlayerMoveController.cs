@@ -1,4 +1,5 @@
 ﻿using Attack;
+using Common;
 using UnityEngine;
 
 namespace Player
@@ -22,7 +23,7 @@ namespace Player
 
         [Header("Components")] public Rigidbody playerRb;
         public Animator playerAnimator;
-        public PlayerCollisionDetector playerCollisionDetector;
+        public GroundCollisionDetector groundCollisionDetector;
         public AttackController attackController;
 
         private float m_currentLandTime;
@@ -36,7 +37,7 @@ namespace Player
         {
             attackController.OnAttackBlockingStart += HandleBlockingStart;
             attackController.OnAttackBlockingEnd += HandleBlockingEnd;
-            playerCollisionDetector.OnPlayerLanded += HandlePlayerLanding;
+            groundCollisionDetector.OnPlayerLanded += HandlePlayerLanding;
 
             m_movementDirection = 0;
             m_lastFrameJumped = false;
@@ -46,7 +47,7 @@ namespace Player
         {
             attackController.OnAttackBlockingStart -= HandleBlockingStart;
             attackController.OnAttackBlockingEnd -= HandleBlockingEnd;
-            playerCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
+            groundCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
         }
 
         private void Update()
@@ -93,7 +94,7 @@ namespace Player
 
         private void HandlePlayerJumpActivated()
         {
-            if (!m_lastFrameJumped || !playerCollisionDetector.IsPlayerOnGround || m_blockingActive)
+            if (!m_lastFrameJumped || !groundCollisionDetector.IsPlayerOnGround || m_blockingActive)
             {
                 return;
             }
@@ -144,7 +145,7 @@ namespace Player
                 return;
             }
 
-            float movementSpeed = playerCollisionDetector.IsPlayerOnGround ? moveForce : airMoveForce;
+            float movementSpeed = groundCollisionDetector.IsPlayerOnGround ? moveForce : airMoveForce;
             Vector3 movementForce = m_movementDirection * movementSpeed * transform.forward;
 
             if (!(playerRb.velocity.x > maxXZMovementAmount || playerRb.velocity.z > maxXZMovementAmount))
