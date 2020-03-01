@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Attack
 {
@@ -13,7 +14,7 @@ namespace Attack
 
         public List<AttackInputEnum> attackInputs;
         public float attackBlockStopTime;
-        public AttackEnum attackEnum;
+        [FormerlySerializedAs("attackEnum")] public PlayerAttackEnum playerAttackEnum;
 
         [Header("Sequential Attack")] public List<BaseAttack> sequentialAttacks;
 
@@ -24,8 +25,8 @@ namespace Attack
         private float m_currentRunTime;
         private bool m_isAttackActive;
 
-        public delegate void AttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger);
-        public delegate void AttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger);
+        public delegate void AttackLaunched(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger);
+        public delegate void AttackEnded(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger);
 
         public AttackLaunched OnAttackLaunched;
         public AttackEnded OnAttackEnded;
@@ -82,7 +83,7 @@ namespace Attack
             m_currentRunTime = attackRunTime;
             m_isAttackActive = true;
 
-            OnAttackLaunched?.Invoke(attackEnum, attackAnimTrigger);
+            OnAttackLaunched?.Invoke(playerAttackEnum, attackAnimTrigger);
 
             Debug.Log($"Attack Launched: {name}");
         }
@@ -114,7 +115,7 @@ namespace Attack
 
             Debug.Log($"Attack Ended: {name}");
 
-            OnAttackEnded?.Invoke(attackEnum, attackAnimTrigger);
+            OnAttackEnded?.Invoke(playerAttackEnum, attackAnimTrigger);
         }
 
         #endregion

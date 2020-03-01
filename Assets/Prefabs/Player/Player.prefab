@@ -2956,7 +2956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2235e4bd027a744a52d151b321ec36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCollisionDetector: {fileID: 2986316763196247864}
+  groundCollisionDetector: {fileID: 2986316763196247864}
   collisionNotifier: {fileID: 7007231992806856330}
   attackController: {fileID: 7470361326429796175}
   playerAnimator: {fileID: 4022764822178872553}
@@ -2982,7 +2982,7 @@ MonoBehaviour:
   disableFallAfterLand: 0.3
   playerRb: {fileID: 27546463}
   playerAnimator: {fileID: 4022764822178872553}
-  playerCollisionDetector: {fileID: 2986316763196247864}
+  groundCollisionDetector: {fileID: 2986316763196247864}
   attackController: {fileID: 7470361326429796175}
 --- !u!114 &2986316763196247864
 MonoBehaviour:

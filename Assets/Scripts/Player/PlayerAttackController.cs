@@ -87,14 +87,14 @@ namespace Player
             playerAnimator.SetBool(BlockParam, false);
         }
 
-        private void HandleAttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger)
+        private void HandleAttackLaunched(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger)
         {
             m_attackLaunched = true;
             playerAnimator.SetBool(BaseAttackParam, true);
             playerAnimator.SetTrigger(i_attackAnimTrigger);
         }
 
-        private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger)
+        private void HandleAttackEnded(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger)
         {
             m_attackLaunched = false;
             playerAnimator.SetBool(BaseAttackParam, false);

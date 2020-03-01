@@ -138,10 +138,10 @@ namespace Player
 
         #region Event Handlers
 
-        private void HandleAttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger) =>
+        private void HandleAttackLaunched(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger) =>
             m_attackLaunched = true;
 
-        private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger) => m_attackLaunched = false;
+        private void HandleAttackEnded(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger) => m_attackLaunched = false;
 
         private void HandleResetAttackInputs()
         {

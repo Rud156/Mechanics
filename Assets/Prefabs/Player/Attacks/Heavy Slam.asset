@@ -16,7 +16,7 @@ MonoBehaviour:
   allowedAttacks: []
   attackInputs: 00000000000000000300000004000000
   attackBlockStopTime: 1
-  attackEnum: 4
+  playerAttackEnum: 5
   sequentialAttacks: []
   attackRunTime: 2.28
   attackAnimTrigger: HSlam

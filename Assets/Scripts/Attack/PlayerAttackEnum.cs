@@ -1,8 +1,7 @@
 ﻿namespace Attack
 {
-    public enum AttackEnum
+    public enum PlayerAttackEnum
     {
-        // Player
         FastPunchSlash, // 1.19
         HeavySlash, // 1.19
         ForwardSlash, // 1.09

@@ -19,8 +19,8 @@ namespace Attack
         private bool m_isInAir;
         private bool m_blockingActive;
 
-        public delegate void AttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger);
-        public delegate void AttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger);
+        public delegate void AttackLaunched(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger);
+        public delegate void AttackEnded(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger);
         public delegate void ResetAttackInputs();
         public delegate void AttackRecoilStart();
         public delegate void AttackRecoilEnd();
@@ -317,16 +317,16 @@ namespace Attack
             }
         }
 
-        private void HandleAttackLaunched(AttackEnum i_attackEnum, string i_attackAnimTrigger)
+        private void HandleAttackLaunched(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger)
         {
             m_currentRunningAttack.OnAttackLaunched -= HandleAttackLaunched;
-            OnAttackLaunched?.Invoke(i_attackEnum, i_attackAnimTrigger);
+            OnAttackLaunched?.Invoke(i_playerAttackEnum, i_attackAnimTrigger);
         }
 
-        private void HandleAttackEnded(AttackEnum i_attackEnum, string i_attackAnimTrigger)
+        private void HandleAttackEnded(PlayerAttackEnum i_playerAttackEnum, string i_attackAnimTrigger)
         {
             m_currentRunningAttack.OnAttackEnded -= HandleAttackEnded;
-            OnAttackEnded?.Invoke(i_attackEnum, i_attackAnimTrigger);
+            OnAttackEnded?.Invoke(i_playerAttackEnum, i_attackAnimTrigger);
 
             LaunchAccumulatedAttack();
         }
