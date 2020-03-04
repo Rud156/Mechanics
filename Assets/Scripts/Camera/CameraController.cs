@@ -16,6 +16,7 @@ namespace CustomCamera
         public float maxZoomDistance;
         public float minDistanceAmount;
         public float maxDistanceAmount;
+        public float zoomLerpSpeed;
 
         private Vector3 m_velocity;
 
@@ -53,7 +54,7 @@ namespace CustomCamera
                 1, 0
             );
             float newZoom = Mathf.Lerp(maxZoomDistance, minZoomDistance, mappedDistance);
-            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, newZoom, Time.deltaTime);
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, newZoom, Time.deltaTime * zoomLerpSpeed);
         }
 
         private float GetGreatestDistance()

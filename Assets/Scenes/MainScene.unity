@@ -480,11 +480,12 @@ MonoBehaviour:
   - {fileID: 8506065931763683347}
   mainCamera: {fileID: 5553107208329423768}
   smoothTime: 0.5
-  offset: {x: -10, y: 2, z: 0}
+  offset: {x: -16.11, y: 4.56, z: 0}
   minZoomDistance: 35
   maxZoomDistance: 80
   minDistanceAmount: 10
   maxDistanceAmount: 40
+  zoomLerpSpeed: 3
 --- !u!1001 &610789900
 PrefabInstance:
   m_ObjectHideFlags: 0
