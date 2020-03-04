@@ -21,6 +21,8 @@ namespace Enemy
         public float moveAwayProbability;
         public float idleNotSwitchProbability;
 
+        [Header("Attack")] public float attackStartRange;
+
         private Transform m_playerTransform;
         private EnemyStateEnum m_enemyState;
         private float m_currentTimer;
