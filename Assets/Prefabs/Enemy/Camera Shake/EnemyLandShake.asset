@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EnemyLandShake
   m_EditorClassIdentifier: 
   shakeMagnitude: 0.5
-  shakeTimer: 0.3
+  shakeTimer: 0.1
