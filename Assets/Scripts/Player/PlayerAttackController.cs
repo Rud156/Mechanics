@@ -53,7 +53,7 @@ namespace Player
             groundCollisionDetector.OnPlayerLanded -= HandlePlayerLanding;
         }
 
-        private void Update() => attackController.IsInAir = !groundCollisionDetector.IsPlayerOnGround;
+        private void Update() => attackController.IsInAir = !groundCollisionDetector.IsOnGround;
 
         #endregion
 
@@ -103,7 +103,7 @@ namespace Player
 
         private void HandlePlayerLanding()
         {
-            attackController.IsInAir = !groundCollisionDetector.IsPlayerOnGround;
+            attackController.IsInAir = !groundCollisionDetector.IsOnGround;
 
             if (m_attackLaunched)
             {

@@ -94,7 +94,7 @@ namespace Player
 
         private void HandlePlayerJumpActivated()
         {
-            if (!m_lastFrameJumped || !groundCollisionDetector.IsPlayerOnGround || m_blockingActive)
+            if (!m_lastFrameJumped || !groundCollisionDetector.IsOnGround || m_blockingActive)
             {
                 return;
             }
@@ -145,8 +145,8 @@ namespace Player
                 return;
             }
 
-            float movementSpeed = groundCollisionDetector.IsPlayerOnGround ? moveForce : airMoveForce;
-            Vector3 movementForce = m_movementDirection * movementSpeed * transform.forward;
+            float movementSpeed = groundCollisionDetector.IsOnGround ? moveForce : airMoveForce;
+            Vector3 movementForce = m_movementDirection * movementSpeed * Vector3.back;
 
             if (!(playerRb.velocity.x > maxXZMovementAmount || playerRb.velocity.z > maxXZMovementAmount))
             {

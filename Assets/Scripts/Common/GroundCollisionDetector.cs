@@ -19,7 +19,7 @@ namespace Common
         public PlayerLanded OnPlayerLanded;
 
         private bool m_lastGroundStatus;
-        private bool m_isPlayerOnGround;
+        private bool _mIsOnGround;
 
         #region Unity Functions
 
@@ -30,24 +30,24 @@ namespace Common
             if (Physics.Raycast(rayCastPosition, Vector3.down, out RaycastHit hit, rayCastDistance, layerMask))
             {
                 // Maybe use hit for something later on...
-                m_isPlayerOnGround = true;
+                _mIsOnGround = true;
             }
             else
             {
-                m_isPlayerOnGround = false;
+                _mIsOnGround = false;
             }
 
             CheckAndNotifyPlayerLanded();
             HandleDebug(rayCastPosition);
 
-            m_lastGroundStatus = m_isPlayerOnGround;
+            m_lastGroundStatus = _mIsOnGround;
         }
 
         #endregion
 
         #region External Functions
 
-        public bool IsPlayerOnGround => m_isPlayerOnGround;
+        public bool IsOnGround => _mIsOnGround;
 
         #endregion
 
@@ -55,7 +55,7 @@ namespace Common
 
         private void CheckAndNotifyPlayerLanded()
         {
-            if (m_lastGroundStatus != m_isPlayerOnGround && m_isPlayerOnGround)
+            if (m_lastGroundStatus != _mIsOnGround && _mIsOnGround)
             {
                 CameraShaker.Instance.StartCameraShake(cameraShakeData);
                 OnPlayerLanded?.Invoke();
